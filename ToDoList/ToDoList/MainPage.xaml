@@ -8,6 +8,46 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <!--Drop out menu with pages-->
+        <SplitView Name="SplitViewMenu" DisplayMode="CompactInline" CompactPaneLength="50" OpenPaneLength="145" IsPaneOpen="False">
+            <SplitView.Pane>
+                <StackPanel>
+                    <Button x:Name="MenuButton"
+                        Width="50" Height="50" Background="Transparent" Click="MenuButton_Click"/>
+                    <StackPanel Orientation="Horizontal" Background="LightBlue">
+                        <Button x:Name="PersonalMenu" Width="50" Height="50" Background="Transparent"/>
+                        <TextBlock Text="Personal" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightSkyBlue">
+                        <Button x:Name="ShoppingMenu" Width="50" Height="50" Background="Transparent"/>
+                        <TextBlock Text="Shopping" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightSteelBlue">
+                        <Button x:Name="WeeklyMenu" Width="50" Height="50" Background="Transparent"/>
+                        <TextBlock Text="Weekly" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="LightSlateGray">
+                        <Button x:Name="SettingsMenu" Width="50" Height="50" Background="Transparent"/>
+                        <TextBlock Text="Settings" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </SplitView.Pane>
 
+            <!--Page contents-->
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="ToDoList Pro" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
     </Grid>
 </Page>

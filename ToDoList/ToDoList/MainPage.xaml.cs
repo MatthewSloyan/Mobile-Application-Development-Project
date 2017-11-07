@@ -26,5 +26,10 @@ namespace ToDoList
         {
             this.InitializeComponent();
         }
+
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            SplitViewMenu.IsPaneOpen = !SplitViewMenu.IsPaneOpen;
+        }
     }
 }
