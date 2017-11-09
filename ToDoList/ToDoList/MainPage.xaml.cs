@@ -32,9 +32,20 @@ namespace ToDoList
             SplitViewMenu.IsPaneOpen = !SplitViewMenu.IsPaneOpen;
         }
 
+        //navigation
         private void ShoppingMenu_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(ShoppingPage));
+        }
+
+        private void WeeklyMenu_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(WeeklyPage));
+        }
+
+        private void SettingsMenu_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage));
         }
     }
 }
