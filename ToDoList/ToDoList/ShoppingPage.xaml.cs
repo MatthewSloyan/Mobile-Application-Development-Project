@@ -38,9 +38,9 @@ namespace ToDoList
             Frame.Navigate(typeof(MainPage));
         }
 
-        private void ShoppingMenu_Click(object sender, RoutedEventArgs e)
+        private void SettingsMenu_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(ShoppingPage));
+            Frame.Navigate(typeof(SettingsPage));
         }
 
         private void WeeklyMenu_Click(object sender, RoutedEventArgs e)
@@ -48,9 +48,6 @@ namespace ToDoList
             Frame.Navigate(typeof(WeeklyPage));
         }
 
-        private void SettingsMenu_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(SettingsPage));
-        }
+       
     }
 }
