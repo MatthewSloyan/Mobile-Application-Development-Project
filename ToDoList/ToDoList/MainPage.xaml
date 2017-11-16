@@ -54,8 +54,9 @@
 
             <!--Page contents-->
             <SplitView.Content>
-                <Grid>
+                <Grid x:Name="listGrid">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="50"/>
@@ -75,15 +76,17 @@
                     <!--<Border Background="#eaeaea" Grid.Row="2" Grid.Column="1"/>-->
                     <TextBlock Text="Personal To-Do Lists" FontWeight="Bold" Foreground="#00A79D" Grid.Column="1" Grid.Row="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
                     <!--<Border Background="Gray" Grid.Row="4" Grid.Column="1" CornerRadius="0,0,5,5" Margin="0,0,180,0"/>-->
-                    <Ellipse Width="30" Height="30" Fill="#00A79D" HorizontalAlignment="Left" Grid.Row="4" Margin="15,0,0,0" Grid.Column="1"/>
+                    <Ellipse Width="30" Height="30" Fill="#00A79D" HorizontalAlignment="Left" Grid.Row="4" Margin="15,0,0,0" Grid.Column="1" Tapped="Ellipse_Tapped"/>
                     <TextBlock Text="Add List Item" Foreground="#00A79D" Grid.Column="1" Grid.Row="4" Margin="55,15,0,15" VerticalAlignment="Center"/>
 
                     <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="2" Margin="0,0,0,48"/>
-                    <TextBlock Text="Wash dishes and collect kids." Grid.Row="2" Grid.Column="1" Foreground="#58595B" VerticalAlignment="Center" Margin="15, 2, 10, 0"/>
+                    <!--<TextBlock Text="Wash dishes and collect kids." Grid.Row="2" Grid.Column="1" Foreground="#58595B" VerticalAlignment="Center" Margin="15, 2, 10, 0"/>-->
 
                     <Border Background="LightGray" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,48"/>
                     <Border Background="LightGray" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" CornerRadius="1" Margin="0,0,0,48"/>
                     <TextBlock Text="Take out the bins." Grid.Row="3" Grid.Column="1" Foreground="#58595B" VerticalAlignment="Center" Margin="15, 2, 10, 0"/>
+
+                    <CheckBox x:Name="deleteList" Grid.Column="2" HorizontalAlignment="Left" Margin="14,3,0,0" Grid.Row="2" Width="20"/>
 
                 </Grid>
             </SplitView.Content>
