@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -12,6 +13,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
@@ -24,6 +26,10 @@ namespace ToDoList
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        //global variables
+        int _RowNum;
+        int _ColumnNum;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -63,7 +69,7 @@ namespace ToDoList
             popUpAddItem.Height = 80;
             popUpAddItem.Width = 400;
             popUpAddItem.CornerRadius = new CornerRadius(5);
-            popUpAddItem.SetValue(Grid.RowProperty, 6);
+            popUpAddItem.SetValue(Grid.RowProperty, 13);
             popUpAddItem.SetValue(Grid.ColumnProperty, 1);
             popUpAddItem.SetValue(Grid.ColumnSpanProperty, 2);
             popUpAddItem.Background = new SolidColorBrush(Colors.Gray);
@@ -101,27 +107,162 @@ namespace ToDoList
 
         private void popUpAddItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            StackPanel hideItemPanel = FindName("stackPanelList") as StackPanel;
-            hideItemPanel.Visibility = Visibility.Collapsed;
+            int countChildren;
+            String dividerBarName = "", inputTextName = "", deleteName = "";
 
+            //StackPanel hideItemPanel = FindName("stackPanelList") as StackPanel;
+            //hideItemPanel.Visibility = Visibility.Collapsed;
+            
             TextBox getInputText = FindName("listText") as TextBox;
             string objTextBox = getInputText.Text;
 
+            countChildren = VisualTreeHelper.GetChildrenCount(listGrid);
+            Debug.WriteLine(countChildren);
+
+            switch (countChildren)
+            {
+                case 6:
+                    _RowNum = 2;
+                    dividerBarName = "listDividerBar_1";
+                    inputTextName = "listTextBox_1";
+                    deleteName = "deleteImage_1";
+                    break;
+                case 9:
+                    _RowNum = 3;
+                    dividerBarName = "listDividerBar_2";
+                    inputTextName = "listTextBox_2";
+                    deleteName = "deleteImage_2";
+                    break;
+                case 12:
+                    _RowNum = 4;
+                    dividerBarName = "listDividerBar_3";
+                    inputTextName = "listTextBox_3";
+                    deleteName = "deleteImage_3";
+                    break;
+                case 15:
+                    _RowNum = 5;
+                    dividerBarName = "listDividerBar_4";
+                    inputTextName = "listTextBox_4";
+                    deleteName = "deleteImage_4";
+                    break;
+                case 18:
+                    _RowNum = 6;
+                    dividerBarName = "listDividerBar_5";
+                    inputTextName = "listTextBox_5";
+                    deleteName = "deleteImage_5";
+                    break;
+                case 21:
+                    _RowNum = 7;
+                    dividerBarName = "listDividerBar_6";
+                    inputTextName = "listTextBox_6";
+                    deleteName = "deleteImage_6";
+                    break;
+                case 24:
+                    _RowNum = 8;
+                    dividerBarName = "listDividerBar_7";
+                    inputTextName = "listTextBox_7";
+                    deleteName = "deleteImage_7";
+                    break;
+                default:
+                    _RowNum = 9;
+                    dividerBarName = "listDividerBar_8";
+                    inputTextName = "listTextBox_8";
+                    deleteName = "deleteImage_8";
+                    break;
+            }
+
+            Border dividerBar = new Border();
+            dividerBar.Name = dividerBarName;
+            dividerBar.Background = new SolidColorBrush(Colors.LightGray);
+            dividerBar.SetValue(Grid.RowProperty, _RowNum);
+            dividerBar.SetValue(Grid.ColumnProperty, 1);
+            dividerBar.SetValue(Grid.ColumnSpanProperty, 2);
+            dividerBar.Margin = new Thickness(0, 0, 0, 48);
+            dividerBar.CornerRadius = new CornerRadius(1);
+            listGrid.Children.Add(dividerBar);
+
             TextBlock addInputText = new TextBlock();
+            addInputText.Name = inputTextName;
             addInputText.Text = objTextBox;
             addInputText.Foreground = new SolidColorBrush(Colors.Gray);
-            addInputText.SetValue(Grid.RowProperty, 2);
+            addInputText.SetValue(Grid.RowProperty, _RowNum);
             addInputText.SetValue(Grid.ColumnProperty, 1);
             addInputText.Margin = new Thickness(15, 2, 10, 0);
             addInputText.VerticalAlignment = VerticalAlignment.Center;
             listGrid.Children.Add(addInputText);
+            
+            Image deleteList = new Image();
+            deleteList.Source = new BitmapImage(new Uri("ms-appx:///Assets/DeleteIcon.png"));
+            deleteList.Name = deleteName;
+            deleteList.Height = 35;
+            deleteList.Width = 35;
+            deleteList.SetValue(Grid.RowProperty, _RowNum);
+            deleteList.SetValue(Grid.ColumnProperty, 2);
+            deleteList.VerticalAlignment = VerticalAlignment.Center;
+            deleteList.Margin = new Thickness(5);
+            listGrid.Children.Add(deleteList);
+            deleteList.Tapped += delete_Tapped;
 
-            CheckBox check1 = new CheckBox();
-            check1.SetValue(Grid.RowProperty, 2);
-            check1.SetValue(Grid.ColumnProperty, 2);
-            check1.Margin = new Thickness(14, 3, 0, 0);
-            check1.Background = new SolidColorBrush(Colors.Gray);
-            listGrid.Children.Add(check1);
+            listGrid.Children.Remove(FindName("stackPanelList") as StackPanel);
+        }
+
+        private void delete_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Image currentImage = (Image)sender;
+            String currentObj = currentImage.Name;
+
+            if (currentObj == "deleteImage_1")
+            {
+                //object is returned, so remove
+                listGrid.Children.Remove(FindName("listDividerBar_1") as Border);
+                listGrid.Children.Remove(FindName("listTextBox_1") as TextBlock);
+                listGrid.Children.Remove(FindName("deleteImage_1") as Image);
+            }
+            else if (currentObj == "deleteImage_2")
+            {
+                listGrid.Children.Remove(FindName("listDividerBar_2") as Border);
+                listGrid.Children.Remove(FindName("listTextBox_2") as TextBlock);
+                listGrid.Children.Remove(FindName("deleteImage_2") as Image);
+            }
+            else if (currentObj == "deleteImage_3")
+            {
+                listGrid.Children.Remove(FindName("listDividerBar_3") as Border);
+                listGrid.Children.Remove(FindName("listTextBox_3") as TextBlock);
+                listGrid.Children.Remove(FindName("deleteImage_3") as Image);
+            }
+            else if (currentObj == "deleteImage_4")
+            {
+                listGrid.Children.Remove(FindName("listDividerBar_4") as Border);
+                listGrid.Children.Remove(FindName("listTextBox_4") as TextBlock);
+                listGrid.Children.Remove(FindName("deleteImage_4") as Image);
+            }
+            else if (currentObj == "deleteImage_5")
+            {
+                listGrid.Children.Remove(FindName("listDividerBar_5") as Border);
+                listGrid.Children.Remove(FindName("listTextBox_5") as TextBlock);
+                listGrid.Children.Remove(FindName("deleteImage_5") as Image);
+            }
+            else if (currentObj == "deleteImage_6")
+            {
+                listGrid.Children.Remove(FindName("listDividerBar_6") as Border);
+                listGrid.Children.Remove(FindName("listTextBox_6") as TextBlock);
+                listGrid.Children.Remove(FindName("deleteImage_6") as Image);
+            }
+            else if (currentObj == "deleteImage_7")
+            {
+                listGrid.Children.Remove(FindName("listDividerBar_7") as Border);
+                listGrid.Children.Remove(FindName("listTextBox_7") as TextBlock);
+                listGrid.Children.Remove(FindName("deleteImage_7") as Image);
+            }
+            else
+            {
+                listGrid.Children.Remove(FindName("listDividerBar_8") as Border);
+                listGrid.Children.Remove(FindName("listTextBox_8") as TextBlock);
+                listGrid.Children.Remove(FindName("deleteImage_8") as Image);
+            }
+            
+            //Border currentBorder = (Border)sender;
+            //listGrid.Children.Remove(currentBorder as Border);
         }
     }
 }

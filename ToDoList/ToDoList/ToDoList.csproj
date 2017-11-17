@@ -116,6 +116,7 @@
     <None Include="ToDoList_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\DeleteIcon.png" />
     <Content Include="Assets\MenuIcon.png" />
     <Content Include="Assets\PersonalIcon.png" />
     <Content Include="Assets\SettingsIcon.png" />
