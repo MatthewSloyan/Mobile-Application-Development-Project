@@ -116,11 +116,14 @@
     <None Include="ToDoList_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\AddIcon.png" />
+    <Content Include="Assets\AddIconWhite.png" />
     <Content Include="Assets\DeleteIcon.png" />
     <Content Include="Assets\MenuIcon.png" />
     <Content Include="Assets\PersonalIcon.png" />
     <Content Include="Assets\SettingsIcon.png" />
     <Content Include="Assets\ShoppingIcon.png" />
+    <Content Include="Assets\ToDoListProLogo.png" />
     <Content Include="Assets\WeeklyIcon.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
