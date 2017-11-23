@@ -34,7 +34,14 @@ namespace ToDoList
         public MainPage()
         {
             this.InitializeComponent();
-            setupList();
+            setupFile();
+        }
+
+        private async void setupFile()
+        {
+            // Create sample file; replace if exists.
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("list.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
@@ -57,12 +64,7 @@ namespace ToDoList
         {
             Frame.Navigate(typeof(SettingsPage));
         }
-
-        private void setupList()
-        {
-            
-        }
-
+        
         private void Ellipse_Tapped(object sender, TappedRoutedEventArgs e)
         {
             StackPanel popUpAddItem = new StackPanel();
@@ -106,20 +108,21 @@ namespace ToDoList
 
         }
 
-        private void popUpAddItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void popUpAddItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             int countChildren;
             String dividerBarName = "", inputTextName = "", deleteName = "";
 
             //StackPanel hideItemPanel = FindName("stackPanelList") as StackPanel;
             //hideItemPanel.Visibility = Visibility.Collapsed;
-            
+
             TextBox getInputText = FindName("listText") as TextBox;
             string objTextBox = getInputText.Text;
 
             countChildren = VisualTreeHelper.GetChildrenCount(listGrid);
             //Debug.WriteLine(countChildren);
-            if(countChildren <= 27) {
+            if (countChildren <= 27)
+            {
                 switch (countChildren)
                 {
                     case 6:
@@ -191,7 +194,7 @@ namespace ToDoList
                 addInputText.Margin = new Thickness(15, 2, 10, 0);
                 addInputText.VerticalAlignment = VerticalAlignment.Center;
                 listGrid.Children.Add(addInputText);
-            
+
                 Image deleteList = new Image();
                 deleteList.Source = new BitmapImage(new Uri("ms-appx:///Assets/DeleteIcon.png"));
                 deleteList.Name = deleteName;
@@ -205,6 +208,60 @@ namespace ToDoList
                 deleteList.Tapped += delete_Tapped;
 
                 listGrid.Children.Remove(FindName("stackPanelList") as StackPanel);
+
+                //Add values you want to store
+                String[] data = new String[8];
+                data[0] = "Data\n";
+                data[1] = "Hi";
+                data[2] = "Matthew";
+
+                try
+                {
+                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                    Windows.Storage.StorageFile listGetFile = await storageFolder.GetFileAsync("list.txt");
+
+                    await FileIO.AppendTextAsync(listGetFile, objTextBox + "\n");
+
+                    //test file string
+                    string text = await Windows.Storage.FileIO.ReadTextAsync(listGetFile);
+                    Debug.WriteLine(text);
+                }
+                catch (Exception)
+                {
+                    // Shouldn't get here 
+                    Debug.WriteLine("File not found");
+                }
+                
+                //try
+                //{
+                //    //IStorageItem item = await storageFolder.TryGetItemAsync("list.txt");
+                //    Windows.Storage.StorageFile listGetFile = await storageFolder.GetFileAsync("list.txt");
+                //    string text = await Windows.Storage.FileIO.ReadTextAsync(listGetFile);
+                //    Debug.WriteLine(text);
+                //}
+                //catch (Exception)
+                //{
+                //    // Should never get here 
+                //    Debug.WriteLine("File not found");
+                //}
+
+
+
+                //ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
+                //var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                //Array data = new Array();
+
+
+                //Change to string and save to local Storage
+                //toString will convert the array to a string with values separated by a comma
+                //localSettings.Values["someSettingInStorage"] = data.ToString();
+                //Debug.WriteLine(data[2]);
+
+                ////To retrieve the stored string value as a usable array
+                //if (localSettings.Values["someSetting"] != null)
+                //    data = (localSettings.Values["someSetting"]).Split();
+
             } //if
         }
 
@@ -224,26 +281,7 @@ namespace ToDoList
 
             //Border currentBorder = (Border)sender;
             //listGrid.Children.Remove(currentBorder as Border);
-
-            //ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-
-            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            //Array data = new Array();
-
-            //Add values you want to store
-            String[] data = new String[8];
-            data[0] = "Hello";
-            data[1] = "Hi";
-            data[2] = "Matthew";
-
-            //Change to string and save to local Storage
-            //toString will convert the array to a string with values separated by a comma
-            localSettings.Values["someSettingInStorage"] = data.ToString();
-            Debug.WriteLine(data);
-
-            ////To retrieve the stored string value as a usable array
-            //if (localSettings.Values["someSetting"] != null)
-            //    data = (localSettings.Values["someSetting"]).Split();
+            
         }
     }
 }
