@@ -31,7 +31,12 @@ namespace ToDoList
         //global variables
         int _RowNum;
         int _countChildren;
+        int _arrayPosition = 0;
         String _dividerBarName = "", _inputTextName = "", _deleteName = "";
+
+        //Add values you want to store
+        //String[] data = new String[9];
+        List<String> listData = new List<String>();
 
         public MainPage()
         {
@@ -53,6 +58,10 @@ namespace ToDoList
                 var readFile = await Windows.Storage.FileIO.ReadLinesAsync(file);
 
                 int numLines = 0;
+                listData.Clear();
+                //Debug.WriteLine(listData[0]);
+                //Debug.WriteLine(listData[1]);
+                //Debug.WriteLine(listData[2]);
 
                 foreach (var line in readFile)
                 {
@@ -64,51 +73,51 @@ namespace ToDoList
                     {
                         case 1:
                             _RowNum = 2;
+                            _dividerBarName = "listDividerBar_0";
+                            _inputTextName = "listTextBox_0";
+                            _deleteName = "deleteImage_0";
+                            break;
+                        case 2:
+                            _RowNum = 3;
                             _dividerBarName = "listDividerBar_1";
                             _inputTextName = "listTextBox_1";
                             _deleteName = "deleteImage_1";
                             break;
-                        case 2:
-                            _RowNum = 3;
+                        case 3:
+                            _RowNum = 4;
                             _dividerBarName = "listDividerBar_2";
                             _inputTextName = "listTextBox_2";
                             _deleteName = "deleteImage_2";
                             break;
-                        case 3:
-                            _RowNum = 4;
+                        case 4:
+                            _RowNum = 5;
                             _dividerBarName = "listDividerBar_3";
                             _inputTextName = "listTextBox_3";
                             _deleteName = "deleteImage_3";
                             break;
-                        case 4:
-                            _RowNum = 5;
+                        case 5:
+                            _RowNum = 6;
                             _dividerBarName = "listDividerBar_4";
                             _inputTextName = "listTextBox_4";
                             _deleteName = "deleteImage_4";
                             break;
-                        case 5:
-                            _RowNum = 6;
+                        case 6:
+                            _RowNum = 7;
                             _dividerBarName = "listDividerBar_5";
                             _inputTextName = "listTextBox_5";
                             _deleteName = "deleteImage_5";
                             break;
-                        case 6:
-                            _RowNum = 7;
+                        case 7:
+                            _RowNum = 8;
                             _dividerBarName = "listDividerBar_6";
                             _inputTextName = "listTextBox_6";
                             _deleteName = "deleteImage_6";
                             break;
-                        case 7:
-                            _RowNum = 8;
+                        default:
+                            _RowNum = 9;
                             _dividerBarName = "listDividerBar_7";
                             _inputTextName = "listTextBox_7";
                             _deleteName = "deleteImage_7";
-                            break;
-                        default:
-                            _RowNum = 9;
-                            _dividerBarName = "listDividerBar_8";
-                            _inputTextName = "listTextBox_8";
-                            _deleteName = "deleteImage_8";
                             break;
                     } //switch
 
@@ -143,6 +152,8 @@ namespace ToDoList
                     deleteList.Margin = new Thickness(5);
                     listGrid.Children.Add(deleteList);
                     deleteList.Tapped += delete_Tapped;
+                    
+                    listData.Add(inputText);
                 }
             }
             catch (Exception)
@@ -150,6 +161,37 @@ namespace ToDoList
                 // Shouldn't get here 
                 Debug.WriteLine("File not found");
             }
+        }
+
+        //navigated to load list data
+        protected override async void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            try
+            {
+                // Create sample file; replace if exists.
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("list.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+
+                //Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                //Windows.Storage.StorageFile listSetFile = await storageFolder.GetFileAsync("list.txt");
+
+                for (int i = 0; i < listData.Count; i++)
+                {
+                    await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
+                }
+                
+                //test file string
+                string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
+                Debug.WriteLine(text);
+            }
+            catch (Exception)
+            {
+                // Shouldn't get here 
+                Debug.WriteLine("File not found");
+            }
+
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
@@ -219,64 +261,64 @@ namespace ToDoList
 
         }
 
-        private async void popUpAddItem_Tapped(object sender, TappedRoutedEventArgs e)
+        private void popUpAddItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
             TextBox getInputText = FindName("listText") as TextBox;
             string objTextBox = getInputText.Text;
 
             _countChildren = VisualTreeHelper.GetChildrenCount(listGrid);
-            
+
             if (_countChildren <= 27)
             {
                 switch (_countChildren)
                 {
                     case 6:
                         _RowNum = 2;
+                        _dividerBarName = "listDividerBar_0";
+                        _inputTextName = "listTextBox_0";
+                        _deleteName = "deleteImage_0";
+                        break;
+                    case 9:
+                        _RowNum = 3;
                         _dividerBarName = "listDividerBar_1";
                         _inputTextName = "listTextBox_1";
                         _deleteName = "deleteImage_1";
                         break;
-                    case 9:
-                        _RowNum = 3;
+                    case 12:
+                        _RowNum = 4;
                         _dividerBarName = "listDividerBar_2";
                         _inputTextName = "listTextBox_2";
                         _deleteName = "deleteImage_2";
                         break;
-                    case 12:
-                        _RowNum = 4;
+                    case 15:
+                        _RowNum = 5;
                         _dividerBarName = "listDividerBar_3";
                         _inputTextName = "listTextBox_3";
                         _deleteName = "deleteImage_3";
                         break;
-                    case 15:
-                        _RowNum = 5;
+                    case 18:
+                        _RowNum = 6;
                         _dividerBarName = "listDividerBar_4";
                         _inputTextName = "listTextBox_4";
                         _deleteName = "deleteImage_4";
                         break;
-                    case 18:
-                        _RowNum = 6;
+                    case 21:
+                        _RowNum = 7;
                         _dividerBarName = "listDividerBar_5";
                         _inputTextName = "listTextBox_5";
                         _deleteName = "deleteImage_5";
                         break;
-                    case 21:
-                        _RowNum = 7;
+                    case 24:
+                        _RowNum = 8;
                         _dividerBarName = "listDividerBar_6";
                         _inputTextName = "listTextBox_6";
                         _deleteName = "deleteImage_6";
                         break;
-                    case 24:
-                        _RowNum = 8;
+                    default:
+                        _RowNum = 9;
                         _dividerBarName = "listDividerBar_7";
                         _inputTextName = "listTextBox_7";
                         _deleteName = "deleteImage_7";
-                        break;
-                    default:
-                        _RowNum = 9;
-                        _dividerBarName = "listDividerBar_8";
-                        _inputTextName = "listTextBox_8";
-                        _deleteName = "deleteImage_8";
                         break;
                 } //switch
 
@@ -312,25 +354,13 @@ namespace ToDoList
                 listGrid.Children.Add(deleteList);
                 deleteList.Tapped += delete_Tapped;
 
+                listData.Add(objTextBox);
+                //data[_arrayPosition] = objTextBox;
+                //Debug.WriteLine(data[_arrayPosition]);
+                //_arrayPosition++;
+
                 listGrid.Children.Remove(FindName("stackPanelList") as StackPanel);
-
-                try
-                {
-                    Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                    Windows.Storage.StorageFile listSetFile = await storageFolder.GetFileAsync("list.txt");
-
-                    await FileIO.AppendTextAsync(listSetFile, objTextBox + "\n");
-
-                    //test file string
-                    string text = await Windows.Storage.FileIO.ReadTextAsync(listSetFile);
-                    Debug.WriteLine(text);
-                }
-                catch (Exception)
-                {
-                    // Shouldn't get here 
-                    Debug.WriteLine("File not found");
-                }
-
+               
             } //if to limit list items to 8
         }
 
@@ -339,6 +369,17 @@ namespace ToDoList
             Image currentImage = (Image)sender;
             String currentObj = currentImage.Name;
             string output = currentObj.Substring(currentObj.Length - 1, 1);
+            int arrayPos = Convert.ToInt32(output);
+            
+            try
+            {
+                listData.RemoveAt(arrayPos);
+            }
+            catch (Exception)
+            {
+                // Shouldn't get here 
+                Debug.WriteLine("Exception");
+            }
 
             if (currentObj == "deleteImage_" + output)
             {

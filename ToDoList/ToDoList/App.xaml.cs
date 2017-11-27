@@ -78,9 +78,7 @@ namespace ToDoList
                 Window.Current.Activate();
             }
 
-            // Create sample file; replace if exists.
-            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("list.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+            
         }
 
         /// <summary>
