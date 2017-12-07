@@ -66,7 +66,6 @@
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="50"/>
-
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
@@ -77,24 +76,14 @@
                         <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="15"/>
                     </Grid.ColumnDefinitions>
-                    <!--<TextBlock Text="ToDoList Pro" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,0,0,0"/>-->
-                    <Image Source="Assets/ToDoListProLogo.png" Height="34" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                    <!--<Border Background="#00A79D" Grid.Row="1" CornerRadius="5,5,0,0" Grid.ColumnSpan="2" Grid.Column="1"/>-->
-                    <!--<Border Background="#eaeaea" Grid.Row="2" Grid.Column="1"/>-->
-                    <TextBlock Text="Personal To-Do Lists" FontWeight="Bold" Foreground="#00A79D" Grid.Column="1" Grid.Row="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                    <!--<Border Background="Gray" Grid.Row="4" Grid.Column="1" CornerRadius="0,0,5,5" Margin="0,0,180,0"/>-->
-                    <!--<Ellipse Width="30" Height="30" Fill="#00A79D" HorizontalAlignment="Left" Grid.Row="10" Margin="15,0,0,0" Grid.Column="1" Tapped="Ellipse_Tapped"/>-->
-                    <Image Source="Assets/AddIcon.png" Height="37" HorizontalAlignment="Left" Grid.Row="10" Margin="13,2,0,0" Grid.Column="1" Tapped="Ellipse_Tapped"/>
-                    <TextBlock Text="Add List Item" Foreground="#00A79D" Grid.Column="1" Grid.Row="10" Margin="55,15,0,15" VerticalAlignment="Center"/>
+                
+                    <Image Source="Assets/ToDoListProLogo.png" Height="37" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+         
+                    <TextBlock Text="Personal To-Do Lists" FontSize="18" FontWeight="Bold" Foreground="#00A79D" Grid.Column="1" Grid.Row="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                    <Image Source="Assets/AddIcon.png" Height="37" HorizontalAlignment="Left" Grid.Row="11" Margin="13,2,0,0" Grid.Column="1" Tapped="Ellipse_Tapped"/>
+                    <TextBlock Text="Add List Item" Foreground="#00A79D" Grid.Column="1" Grid.Row="11" Margin="55,15,0,15" VerticalAlignment="Center"/>
 
                     <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="2" Margin="0,0,0,48"/>
-                    <!--<TextBlock Text="Wash dishes and collect kids." Grid.Row="2" Grid.Column="1" Foreground="#58595B" VerticalAlignment="Center" Margin="15, 2, 10, 0"/>-->
-
-                    <!--<Border Background="LightGray" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,48"/>-->
-                    <!--<Border Background="LightGray" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" CornerRadius="1" Margin="0,0,0,48"/>-->
-                    <!--<TextBlock Text="Take out the bins." Grid.Row="3" Grid.Column="1" Foreground="#58595B" VerticalAlignment="Center" Margin="15, 2, 10, 0"/>-->
-
-                    <!--<CheckBox x:Name="deleteList" Grid.Column="2" HorizontalAlignment="Left" Margin="14,3,0,0" Grid.Row="2" Width="20"/>-->
 
                 </Grid>
             </SplitView.Content>
