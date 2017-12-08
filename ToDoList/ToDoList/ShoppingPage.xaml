@@ -73,7 +73,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="15"/>
                     </Grid.ColumnDefinitions>
@@ -81,8 +81,8 @@
                     <Image Source="Assets/ToDoListProLogo.png" Height="37" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
 
                     <TextBlock Text="Shopping List" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="3" Foreground="#27AAE1" Grid.Column="1" Grid.Row="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                    <!--<Image Source="Assets/AddIcon.png" Height="37" HorizontalAlignment="Left" Grid.Row="11" Margin="13,2,0,0" Grid.Column="1" Tapped="Ellipse_Tapped"/>-->
-                    <TextBlock Text="Add List Item" Foreground="#00A79D" Grid.Column="1" Grid.Row="11" Margin="55,15,0,15" VerticalAlignment="Center"/>
+                    <Image Source="Assets/AddIcon.png" Height="40" HorizontalAlignment="Left" Grid.Row="11" Margin="13,2,0,0" Grid.Column="1" Tapped="Ellipse_Tapped"/>
+                    <TextBlock Text="Add List Item" FontSize="17" Foreground="#00A79D" Grid.Column="1" Grid.Row="11" Margin="60,15,0,15" VerticalAlignment="Center"/>
 
                     <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="3" Margin="0,0,0,48"/>
 

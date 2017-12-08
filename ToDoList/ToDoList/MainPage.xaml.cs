@@ -28,6 +28,11 @@ namespace ToDoList
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public MainPage()
+        {
+            this.InitializeComponent();
+        }
+
         //global variables
         int _RowNum;
         int _countChildren;
@@ -35,25 +40,6 @@ namespace ToDoList
 
         //List to add list items to allow removal and saving to file
         List<String> listData = new List<String>();
-
-        public MainPage()
-        {
-            this.InitializeComponent();
-            //createRows();
-        }
-
-        //private void createRows()
-        //{
-        //    int i;
-
-        //    for (i = 0; i <= 10; i++)
-        //    {
-        //        //add the row definitions
-        //        RowDefinition rd = new RowDefinition();
-        //        rd.Height = new GridLength(50, GridUnitType.Pixel);
-        //        listGrid.RowDefinitions.Add(rd);
-        //    }
-        //}
 
         //when burger menu icon is tapped menu opens up
         private void MenuButton_Click(object sender, RoutedEventArgs e)
