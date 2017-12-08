@@ -39,7 +39,21 @@ namespace ToDoList
         public MainPage()
         {
             this.InitializeComponent();
+            //createRows();
         }
+
+        //private void createRows()
+        //{
+        //    int i;
+
+        //    for (i = 0; i <= 10; i++)
+        //    {
+        //        //add the row definitions
+        //        RowDefinition rd = new RowDefinition();
+        //        rd.Height = new GridLength(50, GridUnitType.Pixel);
+        //        listGrid.RowDefinitions.Add(rd);
+        //    }
+        //}
 
         //when burger menu icon is tapped menu opens up
         private void MenuButton_Click(object sender, RoutedEventArgs e)
@@ -248,8 +262,9 @@ namespace ToDoList
                 switch (_countChildren)
                 {
                     case 6:
+                        //sets name for each list item to allow removal
                         _RowNum = 2;
-                        _dividerBarName = "listDividerBar_0";
+                        _dividerBarName = "listDividerBar_0"; 
                         _inputTextName = "listTextBox_0";
                         _deleteName = "deleteImage_0";
                         break;
@@ -303,9 +318,11 @@ namespace ToDoList
                         break;
                 } //switch
 
+                //calls create list item method
                 createListItem(objTextBox);
 
-                listGrid.Children.Remove(FindName("stackPanelList") as StackPanel);
+                //remove the add list text box from view
+                listGrid.Children.Remove(FindName("stackPanelList") as StackPanel); 
                
             } //if to limit list items to 9
         }
@@ -313,6 +330,7 @@ namespace ToDoList
         //create list item and place in determined row
         private void createListItem(string inputText)
         {
+            //creates the dividing grey bar between list items
             Border dividerBar = new Border();
             dividerBar.Name = _dividerBarName;
             dividerBar.Background = new SolidColorBrush(Colors.LightGray);
@@ -323,6 +341,7 @@ namespace ToDoList
             dividerBar.CornerRadius = new CornerRadius(1);
             listGrid.Children.Add(dividerBar);
 
+            //adds a text block with input text
             TextBlock addInputText = new TextBlock();
             addInputText.Name = _inputTextName;
             addInputText.Text = inputText;
@@ -333,6 +352,7 @@ namespace ToDoList
             addInputText.VerticalAlignment = VerticalAlignment.Center;
             listGrid.Children.Add(addInputText);
 
+            //adds delete icon image
             Image deleteList = new Image();
             deleteList.Source = new BitmapImage(new Uri("ms-appx:///Assets/DeleteIcon.png"));
             deleteList.Name = _deleteName;
@@ -348,12 +368,14 @@ namespace ToDoList
             listData.Add(inputText); //add text to list to save to file
         }
 
+        //when delete icon is tapped it removes list item
         private void delete_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            //gets images sender object to get name
             Image currentImage = (Image)sender;
             String currentObj = currentImage.Name;
-            string output = currentObj.Substring(currentObj.Length - 1, 1);
-            int arrayPos = Convert.ToInt32(output);
+            string output = currentObj.Substring(currentObj.Length - 1, 1); //cuts off last character to get list position to add it to name
+            int arrayPos = Convert.ToInt32(output); //convert to integer
             
             try
             {
@@ -367,11 +389,11 @@ namespace ToDoList
 
             if (currentObj == "deleteImage_" + output)
             {
-                //object is returned, so remove
+                //removes individual list element using name
                 listGrid.Children.Remove(FindName("listDividerBar_" + output) as Border);
                 listGrid.Children.Remove(FindName("listTextBox_" + output) as TextBlock);
                 listGrid.Children.Remove(FindName("deleteImage_" + output) as Image);
             }
-        }
-    }
+        } //delete_Tapped
+    } //main page
 }
