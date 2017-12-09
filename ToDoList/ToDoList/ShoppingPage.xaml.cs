@@ -65,128 +65,96 @@ namespace ToDoList
 
         #region navigated to method
         //navigated to, which load list data from file
-        //protected override async void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedFrom(e);
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
 
-        //    //try to access the file
-        //    try
-        //    {
-        //        //test file string
-        //        Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            //// Create file; replace if exists.
+            //Windows.Storage.StorageFolder storageFolder1 = Windows.Storage.ApplicationData.Current.LocalFolder;
+            //Windows.Storage.StorageFile listFile = await storageFolder1.CreateFileAsync("shoppingList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
 
-        //        // read in list item text file
-        //        var file = await storageFolder.GetFileAsync("list.txt");
-        //        var readFile = await Windows.Storage.FileIO.ReadLinesAsync(file);
+            //try to access the file
+            try
+            {
+                //test file string
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
-        //        int numLines = 0;
-        //        listData.Clear(); //clears the list to re-add
+                // read in list item text file
+                var file = await storageFolder.GetFileAsync("shoppingList.txt");
+                var readFile = await Windows.Storage.FileIO.ReadLinesAsync(file);
 
-        //        foreach (var line in readFile)
-        //        {
-        //            String inputText = line.Split('\n')[0]; //splits the line when new line encountered
-        //            numLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
-        //            Debug.WriteLine(numLines);
+                int numLines = 0;
+                listData.Clear(); //clears the list to re-add
 
-        //            switch (numLines)
-        //            {
-        //                case 1:
-        //                    _RowNum = 2;
-        //                    _dividerBarName = "listDividerBar_0";
-        //                    _inputTextName = "listTextBox_0";
-        //                    _deleteName = "deleteImage_0";
-        //                    break;
-        //                case 2:
-        //                    _RowNum = 3;
-        //                    _dividerBarName = "listDividerBar_1";
-        //                    _inputTextName = "listTextBox_1";
-        //                    _deleteName = "deleteImage_1";
-        //                    break;
-        //                case 3:
-        //                    _RowNum = 4;
-        //                    _dividerBarName = "listDividerBar_2";
-        //                    _inputTextName = "listTextBox_2";
-        //                    _deleteName = "deleteImage_2";
-        //                    break;
-        //                case 4:
-        //                    _RowNum = 5;
-        //                    _dividerBarName = "listDividerBar_3";
-        //                    _inputTextName = "listTextBox_3";
-        //                    _deleteName = "deleteImage_3";
-        //                    break;
-        //                case 5:
-        //                    _RowNum = 6;
-        //                    _dividerBarName = "listDividerBar_4";
-        //                    _inputTextName = "listTextBox_4";
-        //                    _deleteName = "deleteImage_4";
-        //                    break;
-        //                case 6:
-        //                    _RowNum = 7;
-        //                    _dividerBarName = "listDividerBar_5";
-        //                    _inputTextName = "listTextBox_5";
-        //                    _deleteName = "deleteImage_5";
-        //                    break;
-        //                case 7:
-        //                    _RowNum = 8;
-        //                    _dividerBarName = "listDividerBar_6";
-        //                    _inputTextName = "listTextBox_6";
-        //                    _deleteName = "deleteImage_6";
-        //                    break;
-        //                case 8:
-        //                    _RowNum = 9;
-        //                    _dividerBarName = "listDividerBar_7";
-        //                    _inputTextName = "listTextBox_7";
-        //                    _deleteName = "deleteImage_7";
-        //                    break;
-        //                default:
-        //                    _RowNum = 10;
-        //                    _dividerBarName = "listDividerBar_8";
-        //                    _inputTextName = "listTextBox_8";
-        //                    _deleteName = "deleteImage_8";
-        //                    break;
+                foreach (var line in readFile)
+                {
+                    String inputCost = "", inputText = "";
 
-        //            } //switch
+                    numLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
 
-        //            //create list item method
-        //            createListItem(inputText);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // Shouldn't get here 
-        //        Debug.WriteLine("File not found");
-        //    }
-        //}
+                    if (numLines % 2 == 0)
+                    {
+                        //if number of lines is even take cost
+                        inputCost = line.Split('\n')[0]; //splits the line when new line encountered
+                        _RowNum = numLines;
+                        Debug.WriteLine(inputCost);
+                    }
+                    else
+                    {
+                        //if number of lines is odd take text
+                        inputText = line.Split('\n')[0];
+                        Debug.WriteLine(inputText);
+                        _RowNum = numLines + 1;
+                    }
+
+                    //Debug.WriteLine(numLines);
+
+                    //sets values for list items using number of lines in the file
+                    _dividerBarName = "listDividerBar_" + (numLines - 2);
+                    _inputTextName = "listTextBox_" + (numLines - 2);
+                    _inputListCost = "listCost_" + (numLines - 2);
+                    _deleteName = "deleteImage_" + (numLines - 2);
+
+                    //calls create list item method
+                    createListItem(inputText, inputCost);
+                }
+            }
+            catch (Exception)
+            {
+                // Shouldn't get here 
+                Debug.WriteLine("File not found");
+            }
+        }
         #endregion
 
-        //#region navigated from method
-        ////when navigated from it saves list to file
-        //protected override async void OnNavigatedFrom(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
+        #region navigated from method
+        //when navigated from it saves list to file
+        protected override async void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
 
-        //    try
-        //    {
-        //        // Create file; replace if exists.
-        //        Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-        //        Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("list.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+            try
+            {
+                // Create file; replace if exists.
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("shoppingList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
 
-        //        for (int i = 0; i < listData.Count; i++)
-        //        {
-        //            await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
-        //        }
+                for (int i = 0; i < listData.Count; i++)
+                {
+                    await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
+                }
 
-        //        //test file string
-        //        string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
-        //        Debug.WriteLine(text);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // Shouldn't get here 
-        //        Debug.WriteLine("File not found");
-        //    }
-        //}
-        //#endregion
+                //test file string
+                string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
+                Debug.WriteLine(text);
+            }
+            catch (Exception)
+            {
+                // Shouldn't get here 
+                Debug.WriteLine("File not found");
+            }
+        }
+        #endregion
 
         //when add list item image is selected, show text box
         private void Ellipse_Tapped(object sender, TappedRoutedEventArgs e)
@@ -398,8 +366,8 @@ namespace ToDoList
             listGrid.Children.Add(deleteList);
             deleteList.Tapped += delete_Tapped;
 
-            listData.Add(inputText); //add text to list to save to file
-            listData.Add(inputCost);
+            listData.Add(inputText + "\n"+ inputCost); //add text to list to save to file
+            //listData.Add(inputCost);
         }
 
         //when delete icon is tapped it removes list item
@@ -414,6 +382,7 @@ namespace ToDoList
             try
             {
                 listData.RemoveAt(arrayPos);
+                listData.RemoveAt(arrayPos + 1);
             }
             catch (Exception)
             {

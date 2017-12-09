@@ -90,64 +90,11 @@ namespace ToDoList
                     numLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
                     Debug.WriteLine(numLines);
 
-                    switch (numLines)
-                    {
-                        case 1:
-                            _RowNum = 2;
-                            _dividerBarName = "listDividerBar_0";
-                            _inputTextName = "listTextBox_0";
-                            _deleteName = "deleteImage_0";
-                            break;
-                        case 2:
-                            _RowNum = 3;
-                            _dividerBarName = "listDividerBar_1";
-                            _inputTextName = "listTextBox_1";
-                            _deleteName = "deleteImage_1";
-                            break;
-                        case 3:
-                            _RowNum = 4;
-                            _dividerBarName = "listDividerBar_2";
-                            _inputTextName = "listTextBox_2";
-                            _deleteName = "deleteImage_2";
-                            break;
-                        case 4:
-                            _RowNum = 5;
-                            _dividerBarName = "listDividerBar_3";
-                            _inputTextName = "listTextBox_3";
-                            _deleteName = "deleteImage_3";
-                            break;
-                        case 5:
-                            _RowNum = 6;
-                            _dividerBarName = "listDividerBar_4";
-                            _inputTextName = "listTextBox_4";
-                            _deleteName = "deleteImage_4";
-                            break;
-                        case 6:
-                            _RowNum = 7;
-                            _dividerBarName = "listDividerBar_5";
-                            _inputTextName = "listTextBox_5";
-                            _deleteName = "deleteImage_5";
-                            break;
-                        case 7:
-                            _RowNum = 8;
-                            _dividerBarName = "listDividerBar_6";
-                            _inputTextName = "listTextBox_6";
-                            _deleteName = "deleteImage_6";
-                            break;
-                        case 8:
-                            _RowNum = 9;
-                            _dividerBarName = "listDividerBar_7";
-                            _inputTextName = "listTextBox_7";
-                            _deleteName = "deleteImage_7";
-                            break;
-                        default:
-                            _RowNum = 10;
-                            _dividerBarName = "listDividerBar_8";
-                            _inputTextName = "listTextBox_8";
-                            _deleteName = "deleteImage_8";
-                            break;
-
-                    } //switch
+                    //sets values for list items using number of lines in the file
+                    _RowNum = numLines + 1;
+                    _dividerBarName = "listDividerBar_" + (numLines - 1);
+                    _inputTextName = "listTextBox_" + (numLines - 1);
+                    _deleteName = "deleteImage_" + (numLines - 1);
 
                     //create list item method
                     createListItem(inputText); 
