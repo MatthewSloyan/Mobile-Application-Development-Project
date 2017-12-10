@@ -130,16 +130,54 @@ namespace ToDoList
 
                     createListCostItem(_inputCost);
 
-                    ////total cost calculation
-                    //everyCost = Convert.ToDouble(_inputCost); //convert to double
-                    //totalCost += everyCost; //adds to total
+                    //total cost calculation
+                    everyCost = Convert.ToDouble(_inputCost); //convert to double
+                    totalCost += everyCost; //adds to total
                 }
+                addTotal(totalCost);
             }
             catch (Exception)
             {
                 // Shouldn't get here 
                 Debug.WriteLine("File not found");
             }
+        }
+
+        private void addTotal(double totalCost)
+        {
+            String totalCostString;
+            totalCostString = Convert.ToString(totalCost); //convert to string
+
+            //creates the dividing grey bar between list items
+            Border totalDividerBar = new Border();
+            totalDividerBar.Height = 2;
+            totalDividerBar.Background = new SolidColorBrush(Colors.LightGray);
+            totalDividerBar.SetValue(Grid.RowProperty, 10);
+            totalDividerBar.SetValue(Grid.ColumnProperty, 2);
+            totalDividerBar.VerticalAlignment = VerticalAlignment.Top;
+            totalDividerBar.CornerRadius = new CornerRadius(1);
+            listGrid.Children.Add(totalDividerBar);
+
+            //adds a text block with input text
+            TextBlock totalText = new TextBlock();
+            totalText.Text = "Total: ";
+            totalText.Foreground = new SolidColorBrush(Colors.Gray);
+            totalText.SetValue(Grid.RowProperty, 10);
+            totalText.SetValue(Grid.ColumnProperty, 1);
+            totalText.Margin = new Thickness(15, 2, 10, 0);
+            totalText.VerticalAlignment = VerticalAlignment.Center;
+            totalText.HorizontalAlignment = HorizontalAlignment.Right;
+            listGrid.Children.Add(totalText);
+
+            //adds a text block with input text
+            TextBlock totalNum = new TextBlock();
+            totalNum.Text = totalCostString;
+            totalNum.Foreground = new SolidColorBrush(Colors.Gray);
+            totalNum.SetValue(Grid.RowProperty, 10);
+            totalNum.SetValue(Grid.ColumnProperty, 2);
+            totalNum.Margin = new Thickness(10, 0, 10, 0);
+            totalNum.VerticalAlignment = VerticalAlignment.Center;
+            listGrid.Children.Add(totalNum);
         }
         #endregion
 
@@ -238,11 +276,54 @@ namespace ToDoList
             popUpAddItem.Children.Add(confirmListItem);
 
             popUpAddItem.Tapped += popUpAddItem_Tapped;
+            addShoppingCost.TextChanged += addShoppingCost_TextChanged;
+        }
+
+        //validate if number 0-9 or "." is entered
+        private void addShoppingCost_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //gets text box sender object to get text
+            TextBox current = (TextBox)sender;
+
+            if (System.Text.RegularExpressions.Regex.IsMatch(current.Text, "[^0-9^.]"))
+            {
+                current.Text = current.Text.Remove(current.Text.Length - 1); //takes away character if invalid
+                createErrorMessage();
+            }
+        }
+
+        private void createErrorMessage()
+        {
+            StackPanel popUpError = new StackPanel();
+            popUpError.Name = "stackPanelError";
+            popUpError.Height = 37;
+            popUpError.Width = 400;
+            popUpError.CornerRadius = new CornerRadius(5);
+            popUpError.SetValue(Grid.RowProperty, 10);
+            popUpError.SetValue(Grid.ColumnProperty, 1);
+            popUpError.SetValue(Grid.ColumnSpanProperty, 3);
+            popUpError.Background = new SolidColorBrush(Colors.Red);
+            popUpError.Margin = new Thickness(5);
+            popUpError.Orientation = Orientation.Horizontal;
+            popUpError.VerticalAlignment = VerticalAlignment.Center;
+            popUpError.HorizontalAlignment = HorizontalAlignment.Left;
+            listGrid.Children.Add(popUpError);
+
+            //adds a text block with input text
+            TextBlock addErrorText = new TextBlock();
+            addErrorText.Name = "textBlockError";
+            addErrorText.Text = "Input must be a digit from 0-9 or include a '.'";
+            addErrorText.Foreground = new SolidColorBrush(Colors.White);
+            addErrorText.VerticalAlignment = VerticalAlignment.Center;
+            popUpError.Children.Add(addErrorText);
         }
 
         //add list item when add icon is tapped
         private void popUpAddItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            //remove error message if found
+            listGrid.Children.Remove(FindName("stackPanelError") as StackPanel);
+
             //gets textbox objects to get text from
             TextBox getInputText = FindName("listText") as TextBox;
             _inputText = getInputText.Text;
@@ -396,6 +477,13 @@ namespace ToDoList
  
                 listCost.Add(inputCost); //add cost to list to save to file
             } //if
+
+            //total cost calculation
+            //double enteredCost, totalCostEntered = 0;
+
+            //enteredCost = Convert.ToDouble(inputCost); //convert to double
+            //totalCostEntered += enteredCost; //adds to total
+            //addTotal(totalCostEntered);
         }
 
         //when delete icon is tapped it removes list item
