@@ -57,17 +57,17 @@
                 <Grid x:Name="listGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="50"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -84,7 +84,7 @@
                     <Image Source="Assets/AddIcon.png" Height="40" HorizontalAlignment="Left" Grid.Row="11" Margin="13,2,0,0" Grid.Column="1" Tapped="Ellipse_Tapped"/>
                     <TextBlock Text="Add List Item" FontSize="17" Foreground="#00A79D" Grid.Column="1" Grid.Row="11" Margin="60,15,0,15" VerticalAlignment="Center"/>
 
-                    <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="3" Margin="0,0,0,48"/>
+                    <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="3" Height="2" VerticalAlignment="Top"/>
 
                 </Grid>
             </SplitView.Content>

@@ -142,7 +142,7 @@ namespace ToDoList
         {
             StackPanel popUpAddItem = new StackPanel();
             popUpAddItem.Name = "stackPanelList";
-            popUpAddItem.Height = 80;
+            popUpAddItem.Height = 75;
             popUpAddItem.Width = 400;
             popUpAddItem.CornerRadius = new CornerRadius(5);
             popUpAddItem.SetValue(Grid.RowProperty, 13);
@@ -263,42 +263,46 @@ namespace ToDoList
         //create list item and place in determined row
         private void createListItem(string inputText)
         {
-            //creates the dividing grey bar between list items
-            Border dividerBar = new Border();
-            dividerBar.Name = _dividerBarName;
-            dividerBar.Background = new SolidColorBrush(Colors.LightGray);
-            dividerBar.SetValue(Grid.RowProperty, _RowNum);
-            dividerBar.SetValue(Grid.ColumnProperty, 1);
-            dividerBar.SetValue(Grid.ColumnSpanProperty, 2);
-            dividerBar.Margin = new Thickness(0, 0, 0, 48);
-            dividerBar.CornerRadius = new CornerRadius(1);
-            listGrid.Children.Add(dividerBar);
+            if (!(inputText == "")) //input validation to check if list is not empty
+            { 
+                //creates the dividing grey bar between list items
+                Border dividerBar = new Border();
+                dividerBar.Name = _dividerBarName;
+                dividerBar.Background = new SolidColorBrush(Colors.LightGray);
+                dividerBar.Height = 2;
+                dividerBar.SetValue(Grid.RowProperty, _RowNum);
+                dividerBar.SetValue(Grid.ColumnProperty, 1);
+                dividerBar.SetValue(Grid.ColumnSpanProperty, 2);
+                dividerBar.VerticalAlignment = VerticalAlignment.Top;
+                dividerBar.CornerRadius = new CornerRadius(1);
+                listGrid.Children.Add(dividerBar);
 
-            //adds a text block with input text
-            TextBlock addInputText = new TextBlock();
-            addInputText.Name = _inputTextName;
-            addInputText.Text = inputText;
-            addInputText.Foreground = new SolidColorBrush(Colors.Gray);
-            addInputText.SetValue(Grid.RowProperty, _RowNum);
-            addInputText.SetValue(Grid.ColumnProperty, 1);
-            addInputText.Margin = new Thickness(15, 2, 10, 0);
-            addInputText.VerticalAlignment = VerticalAlignment.Center;
-            listGrid.Children.Add(addInputText);
+                //adds a text block with input text
+                TextBlock addInputText = new TextBlock();
+                addInputText.Name = _inputTextName;
+                addInputText.Text = inputText;
+                addInputText.Foreground = new SolidColorBrush(Colors.Gray);
+                addInputText.SetValue(Grid.RowProperty, _RowNum);
+                addInputText.SetValue(Grid.ColumnProperty, 1);
+                addInputText.Margin = new Thickness(15, 2, 10, 0);
+                addInputText.VerticalAlignment = VerticalAlignment.Center;
+                listGrid.Children.Add(addInputText);
 
-            //adds delete icon image
-            Image deleteList = new Image();
-            deleteList.Source = new BitmapImage(new Uri("ms-appx:///Assets/DeleteIcon.png"));
-            deleteList.Name = _deleteName;
-            deleteList.Height = 35;
-            deleteList.Width = 35;
-            deleteList.SetValue(Grid.RowProperty, _RowNum);
-            deleteList.SetValue(Grid.ColumnProperty, 2);
-            deleteList.VerticalAlignment = VerticalAlignment.Center;
-            deleteList.Margin = new Thickness(5);
-            listGrid.Children.Add(deleteList);
-            deleteList.Tapped += delete_Tapped;
+                //adds delete icon image
+                Image deleteList = new Image();
+                deleteList.Source = new BitmapImage(new Uri("ms-appx:///Assets/DeleteIcon.png"));
+                deleteList.Name = _deleteName;
+                deleteList.Height = 35;
+                deleteList.Width = 35;
+                deleteList.SetValue(Grid.RowProperty, _RowNum);
+                deleteList.SetValue(Grid.ColumnProperty, 2);
+                deleteList.VerticalAlignment = VerticalAlignment.Center;
+                deleteList.Margin = new Thickness(5);
+                listGrid.Children.Add(deleteList);
+                deleteList.Tapped += delete_Tapped;
 
-            listData.Add(inputText); //add text to list to save to file
+                listData.Add(inputText); //add text to list to save to file
+            } //if
         }
 
         //when delete icon is tapped it removes list item

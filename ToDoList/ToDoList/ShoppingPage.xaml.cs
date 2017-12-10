@@ -32,12 +32,15 @@ namespace ToDoList
         }
         
         //global variables
-        int _RowNum;
+        int _RowNum = 1;
         int _countChildren;
+        String _inputText; //used to validate if input is entered
+        String _inputCost;
         String _dividerBarName = "", _inputTextName = "", _inputListCost = "", _deleteName = "";
 
         //List to add list items to allow removal and saving to file
         List<String> listData = new List<String>();
+        List<String> listCost = new List<String>();
 
         //when burger menu icon is tapped menu opens up
         private void MenuButton_Click(object sender, RoutedEventArgs e)
@@ -83,40 +86,53 @@ namespace ToDoList
                 var file = await storageFolder.GetFileAsync("shoppingList.txt");
                 var readFile = await Windows.Storage.FileIO.ReadLinesAsync(file);
 
+                var costFile = await storageFolder.GetFileAsync("shoppingListCost.txt");
+                var readCostFile = await Windows.Storage.FileIO.ReadLinesAsync(costFile);
+
                 int numLines = 0;
+                int costNumLines = 0;
+                double everyCost;
+                double totalCost = 0;
                 listData.Clear(); //clears the list to re-add
+                listCost.Clear();
 
                 foreach (var line in readFile)
                 {
-                    String inputCost = "", inputText = "";
+                    _inputText = "";
 
+                    _inputText = line.Split('\n')[0]; //splits the line when new line encountered
                     numLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
+                    Debug.WriteLine(numLines);
 
-                    if (numLines % 2 == 0)
-                    {
-                        //if number of lines is even take cost
-                        inputCost = line.Split('\n')[0]; //splits the line when new line encountered
-                        _RowNum = numLines;
-                        Debug.WriteLine(inputCost);
-                    }
-                    else
-                    {
-                        //if number of lines is odd take text
-                        inputText = line.Split('\n')[0];
-                        Debug.WriteLine(inputText);
-                        _RowNum = numLines + 1;
-                    }
+                    //sets values for list items using number of lines in the file
+                    _RowNum = numLines + 1;
+                    _dividerBarName = "listDividerBar_" + (numLines - 1);
+                    _inputTextName = "listTextBox_" + (numLines - 1);
+                    _deleteName = "deleteImage_" + (numLines - 1);
 
                     //Debug.WriteLine(numLines);
 
-                    //sets values for list items using number of lines in the file
-                    _dividerBarName = "listDividerBar_" + (numLines - 2);
-                    _inputTextName = "listTextBox_" + (numLines - 2);
-                    _inputListCost = "listCost_" + (numLines - 2);
-                    _deleteName = "deleteImage_" + (numLines - 2);
-
                     //calls create list item method
-                    createListItem(inputText, inputCost);
+                    createListItem(_inputText);
+                }
+
+                foreach (var line in readCostFile)
+                {
+                    _inputCost = "";
+
+                    _inputCost = line.Split('\n')[0]; //splits the line when new line encountered
+                    costNumLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
+                    Debug.WriteLine(numLines);
+
+                    //sets values for list items using number of lines in the file
+                    _RowNum = costNumLines + 1;
+                    _inputListCost = "listCost_" + (costNumLines - 1);
+
+                    createListCostItem(_inputCost);
+
+                    ////total cost calculation
+                    //everyCost = Convert.ToDouble(_inputCost); //convert to double
+                    //totalCost += everyCost; //adds to total
                 }
             }
             catch (Exception)
@@ -138,15 +154,19 @@ namespace ToDoList
                 // Create file; replace if exists.
                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
                 Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("shoppingList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                Windows.Storage.StorageFile listCostFile = await storageFolder.CreateFileAsync("shoppingListCost.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
 
                 for (int i = 0; i < listData.Count; i++)
                 {
                     await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
+                    await FileIO.AppendTextAsync(listCostFile, listCost[i] + "\n");
                 }
 
                 //test file string
                 string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
+                string cost = await Windows.Storage.FileIO.ReadTextAsync(listCostFile);
                 Debug.WriteLine(text);
+                Debug.WriteLine(cost);
             }
             catch (Exception)
             {
@@ -201,6 +221,7 @@ namespace ToDoList
             addShoppingCost.VerticalAlignment = VerticalAlignment.Center;
             popUpAddItem.Children.Add(addShoppingCost);
 
+            //scope of cost input
             InputScope currencyScope = new InputScope();
             InputScopeName scopeName = new InputScopeName();
             scopeName.NameValue = InputScopeNameValue.CurrencyAmount;
@@ -217,12 +238,6 @@ namespace ToDoList
             popUpAddItem.Children.Add(confirmListItem);
 
             popUpAddItem.Tapped += popUpAddItem_Tapped;
-
-            //if (addListText.Text == " " && addShoppingCost.Text == " ")
-            //{
-               
-            //}
-
         }
 
         //add list item when add icon is tapped
@@ -230,10 +245,10 @@ namespace ToDoList
         {
             //gets textbox objects to get text from
             TextBox getInputText = FindName("listText") as TextBox;
-            string objTextBox = getInputText.Text;
+            _inputText = getInputText.Text;
 
             TextBox getInputCost = FindName("listCost") as TextBox;
-            string objCost = getInputCost.Text;
+            _inputCost = getInputCost.Text;
 
             //counts the number of children to determine where to place list
             _countChildren = VisualTreeHelper.GetChildrenCount(listGrid);
@@ -309,7 +324,8 @@ namespace ToDoList
                 } //switch
 
                 //calls create list item method
-                createListItem(objTextBox, objCost);
+                createListItem(_inputText);
+                createListCostItem(_inputCost);
 
                 //remove the add list text box from view
                 listGrid.Children.Remove(FindName("stackPanelList") as StackPanel);
@@ -318,56 +334,68 @@ namespace ToDoList
         }
 
         //create list item and place in determined row
-        private void createListItem(string inputText, string inputCost)
+        private void createListItem(string inputText)
         {
-            //creates the dividing grey bar between list items
-            Border dividerBar = new Border();
-            dividerBar.Name = _dividerBarName;
-            dividerBar.Background = new SolidColorBrush(Colors.LightGray);
-            dividerBar.SetValue(Grid.RowProperty, _RowNum);
-            dividerBar.SetValue(Grid.ColumnProperty, 1);
-            dividerBar.SetValue(Grid.ColumnSpanProperty, 3);
-            dividerBar.Margin = new Thickness(0, 0, 0, 48);
-            dividerBar.CornerRadius = new CornerRadius(1);
-            listGrid.Children.Add(dividerBar);
+            if (!(inputText == "") && !(_inputCost == "")) //input validation to check if list is not empty
+            {
+                //creates the dividing grey bar between list items
+                Border dividerBar = new Border();
+                dividerBar.Name = _dividerBarName; 
+                dividerBar.Height = 2;
+                dividerBar.Background = new SolidColorBrush(Colors.LightGray);
+                dividerBar.SetValue(Grid.RowProperty, _RowNum);
+                dividerBar.SetValue(Grid.ColumnProperty, 1);
+                dividerBar.SetValue(Grid.ColumnSpanProperty, 3);
+                dividerBar.VerticalAlignment = VerticalAlignment.Top;
+                dividerBar.CornerRadius = new CornerRadius(1);
+                listGrid.Children.Add(dividerBar);
 
-            //adds a text block with input text
-            TextBlock addInputText = new TextBlock();
-            addInputText.Name = _inputTextName;
-            addInputText.Text = inputText;
-            addInputText.Foreground = new SolidColorBrush(Colors.Gray);
-            addInputText.SetValue(Grid.RowProperty, _RowNum);
-            addInputText.SetValue(Grid.ColumnProperty, 1);
-            addInputText.Margin = new Thickness(15, 2, 10, 0);
-            addInputText.VerticalAlignment = VerticalAlignment.Center;
-            listGrid.Children.Add(addInputText);
+                //adds a text block with input text
+                TextBlock addInputText = new TextBlock();
+                addInputText.Name = _inputTextName;
+                addInputText.Text = inputText;
+                addInputText.Foreground = new SolidColorBrush(Colors.Gray);
+                addInputText.SetValue(Grid.RowProperty, _RowNum);
+                addInputText.SetValue(Grid.ColumnProperty, 1);
+                addInputText.Margin = new Thickness(15, 2, 10, 0);
+                addInputText.VerticalAlignment = VerticalAlignment.Center;
+                listGrid.Children.Add(addInputText);
 
-            //adds a text block with input text
-            TextBlock addInputCost = new TextBlock();
-            addInputCost.Name = _inputListCost;
-            addInputCost.Text = inputCost;
-            addInputCost.Foreground = new SolidColorBrush(Colors.Gray);
-            addInputCost.SetValue(Grid.RowProperty, _RowNum);
-            addInputCost.SetValue(Grid.ColumnProperty, 2);
-            addInputCost.Margin = new Thickness(15, 2, 10, 0);
-            addInputCost.VerticalAlignment = VerticalAlignment.Center;
-            listGrid.Children.Add(addInputCost);
+                //adds delete icon image
+                Image deleteList = new Image();
+                deleteList.Source = new BitmapImage(new Uri("ms-appx:///Assets/DeleteIcon.png"));
+                deleteList.Name = _deleteName;
+                deleteList.Height = 35;
+                deleteList.Width = 35;
+                deleteList.SetValue(Grid.RowProperty, _RowNum);
+                deleteList.SetValue(Grid.ColumnProperty, 3);
+                deleteList.VerticalAlignment = VerticalAlignment.Center;
+                deleteList.Margin = new Thickness(5);
+                listGrid.Children.Add(deleteList);
+                deleteList.Tapped += delete_Tapped;
 
-            //adds delete icon image
-            Image deleteList = new Image();
-            deleteList.Source = new BitmapImage(new Uri("ms-appx:///Assets/DeleteIcon.png"));
-            deleteList.Name = _deleteName;
-            deleteList.Height = 35;
-            deleteList.Width = 35;
-            deleteList.SetValue(Grid.RowProperty, _RowNum);
-            deleteList.SetValue(Grid.ColumnProperty, 3);
-            deleteList.VerticalAlignment = VerticalAlignment.Center;
-            deleteList.Margin = new Thickness(5);
-            listGrid.Children.Add(deleteList);
-            deleteList.Tapped += delete_Tapped;
+                listData.Add(inputText); //add text to list to save to file
+            } //if
+        }
 
-            listData.Add(inputText + "\n"+ inputCost); //add text to list to save to file
-            //listData.Add(inputCost);
+        //create list item and place in determined row
+        private void createListCostItem(string inputCost)
+        {
+            if (!(inputCost == "") && !(_inputText == "")) //input validation to check if list is not empty
+            {
+                //adds a text block with input text
+                TextBlock addInputCost = new TextBlock();
+                addInputCost.Name = _inputListCost;
+                addInputCost.Text = inputCost;
+                addInputCost.Foreground = new SolidColorBrush(Colors.Gray);
+                addInputCost.SetValue(Grid.RowProperty, _RowNum);
+                addInputCost.SetValue(Grid.ColumnProperty, 2);
+                addInputCost.Margin = new Thickness(15, 2, 10, 0);
+                addInputCost.VerticalAlignment = VerticalAlignment.Center;
+                listGrid.Children.Add(addInputCost);
+ 
+                listCost.Add(inputCost); //add cost to list to save to file
+            } //if
         }
 
         //when delete icon is tapped it removes list item
@@ -382,7 +410,7 @@ namespace ToDoList
             try
             {
                 listData.RemoveAt(arrayPos);
-                listData.RemoveAt(arrayPos + 1);
+                listCost.RemoveAt(arrayPos);
             }
             catch (Exception)
             {
