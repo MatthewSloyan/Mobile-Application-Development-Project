@@ -75,7 +75,7 @@
 
                     <StackPanel Grid.Column="1" Grid.Row="2" Margin="0,16,100,0">
                         <TextBlock Text="Currency:" FontSize="18" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                        <RadioButton Content="EUR - €" Tag="€" Margin="15,10,0,0" IsChecked="True" Checked="RadioButton_Checked"/>
+                        <RadioButton Content="EUR - €" Tag="€" Margin="15,10,0,0" Checked="RadioButton_Checked"/>
                         <RadioButton Content="GBP - £" Tag="£" Margin="15,0,0,0" Checked="RadioButton_Checked"/>
                         <RadioButton Content="USD - $" Tag="$" Margin="15,0,0,0" Checked="RadioButton_Checked"/>
                     </StackPanel>
