@@ -34,6 +34,7 @@ namespace ToDoList
         //global variables
         int _RowNum = 1;
         int _countChildren;
+        double _totalCostEntered = 0;
         String _inputText; //used to validate if input is entered
         String _inputCost;
         String _dividerBarName = "", _inputTextName = "", _inputListCost = "", _deleteName = "";
@@ -91,8 +92,6 @@ namespace ToDoList
 
                 int numLines = 0;
                 int costNumLines = 0;
-                double everyCost;
-                double totalCost = 0;
                 listData.Clear(); //clears the list to re-add
                 listCost.Clear();
 
@@ -109,8 +108,6 @@ namespace ToDoList
                     _dividerBarName = "listDividerBar_" + (numLines - 1);
                     _inputTextName = "listTextBox_" + (numLines - 1);
                     _deleteName = "deleteImage_" + (numLines - 1);
-
-                    //Debug.WriteLine(numLines);
 
                     //calls create list item method
                     createListItem(_inputText);
@@ -129,12 +126,7 @@ namespace ToDoList
                     _inputListCost = "listCost_" + (costNumLines - 1);
 
                     createListCostItem(_inputCost);
-
-                    //total cost calculation
-                    everyCost = Convert.ToDouble(_inputCost); //convert to double
-                    totalCost += everyCost; //adds to total
                 }
-                addTotal(totalCost);
             }
             catch (Exception)
             {
@@ -148,29 +140,9 @@ namespace ToDoList
             String totalCostString;
             totalCostString = Convert.ToString(totalCost); //convert to string
 
-            //creates the dividing grey bar between list items
-            Border totalDividerBar = new Border();
-            totalDividerBar.Height = 2;
-            totalDividerBar.Background = new SolidColorBrush(Colors.LightGray);
-            totalDividerBar.SetValue(Grid.RowProperty, 10);
-            totalDividerBar.SetValue(Grid.ColumnProperty, 2);
-            totalDividerBar.VerticalAlignment = VerticalAlignment.Top;
-            totalDividerBar.CornerRadius = new CornerRadius(1);
-            listGrid.Children.Add(totalDividerBar);
-
-            //adds a text block with input text
-            TextBlock totalText = new TextBlock();
-            totalText.Text = "Total: ";
-            totalText.Foreground = new SolidColorBrush(Colors.Gray);
-            totalText.SetValue(Grid.RowProperty, 10);
-            totalText.SetValue(Grid.ColumnProperty, 1);
-            totalText.Margin = new Thickness(15, 2, 10, 0);
-            totalText.VerticalAlignment = VerticalAlignment.Center;
-            totalText.HorizontalAlignment = HorizontalAlignment.Right;
-            listGrid.Children.Add(totalText);
-
             //adds a text block with input text
             TextBlock totalNum = new TextBlock();
+            totalNum.Name = "totalCostTextBlock";
             totalNum.Text = totalCostString;
             totalNum.Foreground = new SolidColorBrush(Colors.Gray);
             totalNum.SetValue(Grid.RowProperty, 10);
@@ -334,11 +306,12 @@ namespace ToDoList
             //counts the number of children to determine where to place list
             _countChildren = VisualTreeHelper.GetChildrenCount(listGrid);
 
-            if (_countChildren <= 38)
+            if (_countChildren <= 37)
             {
                 switch (_countChildren)
                 {
-                    case 6:
+                    case 8:
+                    case 9:
                         //sets name for each list item to allow removal
                         _RowNum = 2;
                         _dividerBarName = "listDividerBar_0";
@@ -346,61 +319,54 @@ namespace ToDoList
                         _inputListCost = "listCost_0";
                         _deleteName = "deleteImage_0";
                         break;
-                    case 10:
+                    case 13:
                         _RowNum = 3;
                         _dividerBarName = "listDividerBar_1";
                         _inputTextName = "listTextBox_1";
                         _inputListCost = "listCost_1";
                         _deleteName = "deleteImage_1";
                         break;
-                    case 14:
+                    case 17:
                         _RowNum = 4;
                         _dividerBarName = "listDividerBar_2";
                         _inputTextName = "listTextBox_2";
                         _inputListCost = "listCost_2";
                         _deleteName = "deleteImage_2";
                         break;
-                    case 18:
+                    case 21:
                         _RowNum = 5;
                         _dividerBarName = "listDividerBar_3";
                         _inputTextName = "listTextBox_3";
                         _inputListCost = "listCost_3";
                         _deleteName = "deleteImage_3";
                         break;
-                    case 22:
+                    case 25:
                         _RowNum = 6;
                         _dividerBarName = "listDividerBar_4";
                         _inputTextName = "listTextBox_4";
                         _inputListCost = "listCost_4";
                         _deleteName = "deleteImage_4";
                         break;
-                    case 26:
+                    case 29:
                         _RowNum = 7;
                         _dividerBarName = "listDividerBar_5";
                         _inputTextName = "listTextBox_5";
                         _inputListCost = "listCost_5";
                         _deleteName = "deleteImage_5";
                         break;
-                    case 30:
+                    case 33:
                         _RowNum = 8;
                         _dividerBarName = "listDividerBar_6";
                         _inputTextName = "listTextBox_6";
                         _inputListCost = "listCost_6";
                         _deleteName = "deleteImage_6";
                         break;
-                    case 34:
+                    default:
                         _RowNum = 9;
                         _dividerBarName = "listDividerBar_7";
                         _inputTextName = "listTextBox_7";
                         _inputListCost = "listCost_7";
                         _deleteName = "deleteImage_7";
-                        break;
-                    default:
-                        _RowNum = 10;
-                        _dividerBarName = "listDividerBar_8";
-                        _inputTextName = "listTextBox_8";
-                        _inputListCost = "listCost_8";
-                        _deleteName = "deleteImage_8";
                         break;
                 } //switch
 
@@ -462,6 +428,8 @@ namespace ToDoList
         //create list item and place in determined row
         private void createListCostItem(string inputCost)
         {
+            double enteredCost;
+
             if (!(inputCost == "") && !(_inputText == "")) //input validation to check if list is not empty
             {
                 //adds a text block with input text
@@ -478,12 +446,22 @@ namespace ToDoList
                 listCost.Add(inputCost); //add cost to list to save to file
             } //if
 
-            //total cost calculation
-            //double enteredCost, totalCostEntered = 0;
+          
+            listGrid.Children.Remove(FindName("totalCostTextBlock") as TextBlock);
 
-            //enteredCost = Convert.ToDouble(inputCost); //convert to double
-            //totalCostEntered += enteredCost; //adds to total
-            //addTotal(totalCostEntered);
+            //total cost calculation
+            try
+            {
+                enteredCost = Convert.ToDouble(inputCost); //convert to double
+                _totalCostEntered += enteredCost; //adds to total
+                Debug.WriteLine(_totalCostEntered);
+                addTotal(_totalCostEntered);
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("Invalid entry");
+                createErrorMessage();
+            }
         }
 
         //when delete icon is tapped it removes list item
