@@ -85,8 +85,8 @@
                     <TextBlock Text="Add List Item" FontSize="17" Foreground="#00A79D" Grid.Column="1" Grid.Row="11" Margin="60,15,0,15" VerticalAlignment="Center"/>
 
                     <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="3" Height="2" VerticalAlignment="Top"/>
-                    <TextBlock Text="Total: " Foreground="Gray" Grid.Column="1" Grid.Row="10" Margin="0,0,5,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                    <Border Background="LightGray" Grid.Row="10" Grid.Column="2" CornerRadius="1" Height="2" VerticalAlignment="Top"/>
+                    <TextBlock Text="Total: " Foreground="Gray" FontWeight="Bold" Grid.Column="1" Grid.Row="10" Margin="0,0,9,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <Border Background="LightGray" Grid.Row="10" Grid.Column="2" CornerRadius="1" Grid.ColumnSpan="2" Height="2" VerticalAlignment="Top"/>
 
                 </Grid>
             </SplitView.Content>

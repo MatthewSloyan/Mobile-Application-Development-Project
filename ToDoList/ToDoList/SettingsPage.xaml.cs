@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,6 +28,7 @@ namespace ToDoList
             this.InitializeComponent();
         }
 
+        //navigation
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
             SplitViewMenu.IsPaneOpen = !SplitViewMenu.IsPaneOpen;
@@ -47,6 +49,16 @@ namespace ToDoList
             Frame.Navigate(typeof(WeeklyPage));
         }
 
-        //navigation
+        //currency radiobuttons
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton current = (RadioButton)sender;
+
+            //save the tag value as the setting and access the data container
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
+            //within the container, save the tag currency
+            localSettings.Values["currencyChoice"] = current.Tag.ToString();
+        }
     }
 }

@@ -134,23 +134,6 @@ namespace ToDoList
                 Debug.WriteLine("File not found");
             }
         }
-
-        private void addTotal(double totalCost)
-        {
-            String totalCostString;
-            totalCostString = Convert.ToString(totalCost); //convert to string
-
-            //adds a text block with input text
-            TextBlock totalNum = new TextBlock();
-            totalNum.Name = "totalCostTextBlock";
-            totalNum.Text = totalCostString;
-            totalNum.Foreground = new SolidColorBrush(Colors.Gray);
-            totalNum.SetValue(Grid.RowProperty, 10);
-            totalNum.SetValue(Grid.ColumnProperty, 2);
-            totalNum.Margin = new Thickness(10, 0, 10, 0);
-            totalNum.VerticalAlignment = VerticalAlignment.Center;
-            listGrid.Children.Add(totalNum);
-        }
         #endregion
 
         #region navigated from method
@@ -250,46 +233,7 @@ namespace ToDoList
             popUpAddItem.Tapped += popUpAddItem_Tapped;
             addShoppingCost.TextChanged += addShoppingCost_TextChanged;
         }
-
-        //validate if number 0-9 or "." is entered
-        private void addShoppingCost_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //gets text box sender object to get text
-            TextBox current = (TextBox)sender;
-
-            if (System.Text.RegularExpressions.Regex.IsMatch(current.Text, "[^0-9^.]"))
-            {
-                current.Text = current.Text.Remove(current.Text.Length - 1); //takes away character if invalid
-                createErrorMessage();
-            }
-        }
-
-        private void createErrorMessage()
-        {
-            StackPanel popUpError = new StackPanel();
-            popUpError.Name = "stackPanelError";
-            popUpError.Height = 37;
-            popUpError.Width = 400;
-            popUpError.CornerRadius = new CornerRadius(5);
-            popUpError.SetValue(Grid.RowProperty, 10);
-            popUpError.SetValue(Grid.ColumnProperty, 1);
-            popUpError.SetValue(Grid.ColumnSpanProperty, 3);
-            popUpError.Background = new SolidColorBrush(Colors.Red);
-            popUpError.Margin = new Thickness(5);
-            popUpError.Orientation = Orientation.Horizontal;
-            popUpError.VerticalAlignment = VerticalAlignment.Center;
-            popUpError.HorizontalAlignment = HorizontalAlignment.Left;
-            listGrid.Children.Add(popUpError);
-
-            //adds a text block with input text
-            TextBlock addErrorText = new TextBlock();
-            addErrorText.Name = "textBlockError";
-            addErrorText.Text = "Input must be a digit from 0-9 or include a '.'";
-            addErrorText.Foreground = new SolidColorBrush(Colors.White);
-            addErrorText.VerticalAlignment = VerticalAlignment.Center;
-            popUpError.Children.Add(addErrorText);
-        }
-
+        
         //add list item when add icon is tapped
         private void popUpAddItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -306,12 +250,14 @@ namespace ToDoList
             //counts the number of children to determine where to place list
             _countChildren = VisualTreeHelper.GetChildrenCount(listGrid);
 
-            if (_countChildren <= 37)
+            if (_countChildren <= 38)
             {
                 switch (_countChildren)
                 {
                     case 8:
                     case 9:
+                    case 10:
+                    case 11:
                         //sets name for each list item to allow removal
                         _RowNum = 2;
                         _dividerBarName = "listDividerBar_0";
@@ -319,42 +265,48 @@ namespace ToDoList
                         _inputListCost = "listCost_0";
                         _deleteName = "deleteImage_0";
                         break;
-                    case 13:
+                    case 14:
+                    case 16:
                         _RowNum = 3;
                         _dividerBarName = "listDividerBar_1";
                         _inputTextName = "listTextBox_1";
                         _inputListCost = "listCost_1";
                         _deleteName = "deleteImage_1";
                         break;
-                    case 17:
+                    case 18:
+                    case 20:
                         _RowNum = 4;
                         _dividerBarName = "listDividerBar_2";
                         _inputTextName = "listTextBox_2";
                         _inputListCost = "listCost_2";
                         _deleteName = "deleteImage_2";
                         break;
-                    case 21:
+                    case 22:
+                    case 24:
                         _RowNum = 5;
                         _dividerBarName = "listDividerBar_3";
                         _inputTextName = "listTextBox_3";
                         _inputListCost = "listCost_3";
                         _deleteName = "deleteImage_3";
                         break;
-                    case 25:
+                    case 26:
+                    case 28:
                         _RowNum = 6;
                         _dividerBarName = "listDividerBar_4";
                         _inputTextName = "listTextBox_4";
                         _inputListCost = "listCost_4";
                         _deleteName = "deleteImage_4";
                         break;
-                    case 29:
+                    case 30:
+                    case 32:
                         _RowNum = 7;
                         _dividerBarName = "listDividerBar_5";
                         _inputTextName = "listTextBox_5";
                         _inputListCost = "listCost_5";
                         _deleteName = "deleteImage_5";
                         break;
-                    case 33:
+                    case 34:
+                    case 36:
                         _RowNum = 8;
                         _dividerBarName = "listDividerBar_6";
                         _inputTextName = "listTextBox_6";
@@ -425,7 +377,7 @@ namespace ToDoList
             } //if
         }
 
-        //create list item and place in determined row
+        //create list cost method and place in determined row
         private void createListCostItem(string inputCost)
         {
             double enteredCost;
@@ -447,7 +399,8 @@ namespace ToDoList
             } //if
 
           
-            listGrid.Children.Remove(FindName("totalCostTextBlock") as TextBlock);
+            listGrid.Children.Remove(FindName("totalCostTextBlock") as TextBlock); //remove objects to add updated object
+            listGrid.Children.Remove(FindName("currencyTextBlock") as TextBlock);
 
             //total cost calculation
             try
@@ -456,6 +409,7 @@ namespace ToDoList
                 _totalCostEntered += enteredCost; //adds to total
                 Debug.WriteLine(_totalCostEntered);
                 addTotal(_totalCostEntered);
+                addCurrency(); //add currency
             }
             catch (Exception)
             {
@@ -464,6 +418,86 @@ namespace ToDoList
             }
         }
 
+        //validate if number 0-9 or "." is entered
+        private void addShoppingCost_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //gets text box sender object to get text
+            TextBox current = (TextBox)sender;
+
+            if (System.Text.RegularExpressions.Regex.IsMatch(current.Text, "[^0-9^.]"))
+            {
+                current.Text = current.Text.Remove(current.Text.Length - 1); //takes away character if invalid
+                createErrorMessage();
+            }
+        }
+
+        // error method which displays error message when input is invalid
+        private void createErrorMessage()
+        {
+            StackPanel popUpError = new StackPanel();
+            popUpError.Name = "stackPanelError";
+            popUpError.Height = 37;
+            popUpError.Width = 400;
+            popUpError.CornerRadius = new CornerRadius(5);
+            popUpError.SetValue(Grid.RowProperty, 10);
+            popUpError.SetValue(Grid.ColumnProperty, 1);
+            popUpError.SetValue(Grid.ColumnSpanProperty, 3);
+            popUpError.Background = new SolidColorBrush(Colors.Red);
+            popUpError.Margin = new Thickness(5);
+            popUpError.Orientation = Orientation.Horizontal;
+            popUpError.VerticalAlignment = VerticalAlignment.Center;
+            popUpError.HorizontalAlignment = HorizontalAlignment.Left;
+            listGrid.Children.Add(popUpError);
+
+            //adds a text block with input text
+            TextBlock addErrorText = new TextBlock();
+            addErrorText.Name = "textBlockError";
+            addErrorText.Text = "Input must be a digit from 0-9 or include a '.'";
+            addErrorText.Foreground = new SolidColorBrush(Colors.White);
+            addErrorText.VerticalAlignment = VerticalAlignment.Center;
+            popUpError.Children.Add(addErrorText);
+        }
+
+        //add total method which takes total calulation and outputs it
+        private void addTotal(double totalCost)
+        {
+            String totalCostString;
+            totalCostString = Convert.ToString(totalCost); //convert to string
+
+            //adds a text block with input text
+            TextBlock totalNum = new TextBlock();
+            totalNum.Name = "totalCostTextBlock";
+            totalNum.Text = totalCostString;
+            totalNum.Foreground = new SolidColorBrush(Colors.Gray);
+            totalNum.SetValue(Grid.RowProperty, 10);
+            totalNum.SetValue(Grid.ColumnProperty, 2);
+            totalNum.SetValue(Grid.ColumnSpanProperty, 2);
+            totalNum.Margin = new Thickness(10, 0, 6, 0);
+            totalNum.VerticalAlignment = VerticalAlignment.Center;
+            listGrid.Children.Add(totalNum);
+        }
+
+        //add currency method which gets currency symbol from settings page and outputs it
+        private void addCurrency()
+        {
+            String currencyString;
+
+            ApplicationDataContainer localSetting = ApplicationData.Current.LocalSettings;
+
+            currencyString = Convert.ToString(localSetting.Values["currencyChoice"]); //convert to string
+
+            //adds a text block with currency
+            TextBlock currencyTextBlock = new TextBlock();
+            currencyTextBlock.Name = "currencyTextBlock";
+            currencyTextBlock.Text = currencyString;
+            currencyTextBlock.Foreground = new SolidColorBrush(Colors.Gray);
+            currencyTextBlock.SetValue(Grid.RowProperty, 10);
+            currencyTextBlock.SetValue(Grid.ColumnProperty, 2);
+            currencyTextBlock.Margin = new Thickness(0, 0, 6, 0);
+            currencyTextBlock.VerticalAlignment = VerticalAlignment.Center;
+            listGrid.Children.Add(currencyTextBlock);
+        }
+        
         //when delete icon is tapped it removes list item
         private void delete_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -475,14 +509,15 @@ namespace ToDoList
 
             try
             {
-                listData.RemoveAt(arrayPos);
-                listCost.RemoveAt(arrayPos);
+                listData.RemoveAt(arrayPos); //remove list elements for text and cost
+                listCost.RemoveAt(arrayPos); 
             }
             catch (Exception)
             {
                 Debug.WriteLine("Exception");
             }
 
+            //delete objects
             if (currentObj == "deleteImage_" + output)
             {
                 //removes individual list element using name
@@ -492,5 +527,5 @@ namespace ToDoList
                 listGrid.Children.Remove(FindName("deleteImage_" + output) as Image);
             }
         } //delete_Tapped
-    }
+    }//main
 }
