@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -34,10 +35,12 @@ namespace ToDoList
         //global variables
         int _RowNum;
         int _countChildren;
-        String _listStackPanel = "", _inputTextName = "", _finalName;
+        String _listStackPanel = "", _inputTextName = "", _finalName, _colour;
+        Ellipse currentColour;
 
         //List to add list items to allow removal and saving to file
         List<String> listData = new List<String>();
+        List<String> colourData = new List<String>();
 
         #region navigation between pages
         //navigation
@@ -106,34 +109,37 @@ namespace ToDoList
         //}
         //#endregion
 
-        //#region navigated from method
-        ////when navigated from it saves list to file
-        //protected override async void OnNavigatedFrom(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
+        #region navigated from method
+        //when navigated from it saves list to file
+        protected override async void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
 
-        //    try
-        //    {
-        //        // Create file; replace if exists.
-        //        Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-        //        Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("list.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+            try
+            {// Create file; replace if exists.
+                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("weeklyList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                Windows.Storage.StorageFile colourFile = await storageFolder.CreateFileAsync("colourList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
 
-        //        for (int i = 0; i < listData.Count; i++)
-        //        {
-        //            await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
-        //        }
+                for (int i = 0; i < listData.Count; i++)
+                {
+                    await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
+                    await FileIO.AppendTextAsync(colourFile, colourData[i] + "\n");
+                }
 
-        //        //test file string
-        //        string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
-        //        Debug.WriteLine(text);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // Shouldn't get here 
-        //        Debug.WriteLine("File not found");
-        //    }
-        //}
-        //#endregion
+                //test file string
+                string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
+                string colour = await Windows.Storage.FileIO.ReadTextAsync(colourFile);
+                Debug.WriteLine(text);
+                Debug.WriteLine(colour);
+            }
+            catch (Exception)
+            {
+                // Shouldn't get here 
+                Debug.WriteLine("File not found");
+            }
+        }
+        #endregion
 
         //when add list item image is selected, show text box
         private void Ellipse_Tapped(object sender, TappedRoutedEventArgs e)
@@ -145,7 +151,6 @@ namespace ToDoList
             popUpAddItem.CornerRadius = new CornerRadius(5);
             popUpAddItem.SetValue(Grid.RowProperty, 13);
             popUpAddItem.SetValue(Grid.ColumnProperty, 1);
-            popUpAddItem.SetValue(Grid.ColumnSpanProperty, 2);
             popUpAddItem.Background = new SolidColorBrush(Colors.Gray);
             popUpAddItem.Margin = new Thickness(5);
             popUpAddItem.Orientation = Orientation.Horizontal;
@@ -159,7 +164,7 @@ namespace ToDoList
             addListText.Background = new SolidColorBrush(Colors.Gray);
             addListText.PlaceholderText = "Please enter your list item";
             addListText.Width = 310;
-            addListText.MaxLength = 40;
+            addListText.MaxLength = 50;
             addListText.Header = "Add a list item";
             addListText.Margin = new Thickness(15, 2, 10, 0);
             addListText.BorderThickness = new Thickness(2, 0, 2, 0);
@@ -171,11 +176,80 @@ namespace ToDoList
             confirmListItem.Source = new BitmapImage(new Uri("ms-appx:///Assets/AddIconWhite.png"));
             confirmListItem.Height = 40;
             confirmListItem.Width = 40;
-            confirmListItem.SetValue(Grid.ColumnProperty, 3);
             confirmListItem.HorizontalAlignment = HorizontalAlignment.Right;
             confirmListItem.Margin = new Thickness(5);
             popUpAddItem.Children.Add(confirmListItem);
+
             popUpAddItem.Tapped += popUpAddItem_Tapped;
+
+            StackPanel colourSp = new StackPanel();
+            colourSp.Name = "spColour";
+            colourSp.Height = 40;
+            colourSp.Width = 400;
+            colourSp.CornerRadius = new CornerRadius(5);
+            colourSp.SetValue(Grid.RowProperty, 9);
+            colourSp.SetValue(Grid.ColumnProperty, 1);
+            colourSp.Margin = new Thickness(5, 0, 5, 0);
+            colourSp.Orientation = Orientation.Horizontal;
+            colourSp.VerticalAlignment = VerticalAlignment.Center;
+            colourSp.HorizontalAlignment = HorizontalAlignment.Left;
+            listGrid.Children.Add(colourSp);
+
+            //adds a text block with input text
+            TextBlock addColourText = new TextBlock();
+            addColourText.Text = "Please select a colour: ";
+            addColourText.Foreground = new SolidColorBrush(Colors.Gray);
+            addColourText.SetValue(Grid.RowProperty, _RowNum);
+            addColourText.SetValue(Grid.ColumnProperty, 1);
+            addColourText.Margin = new Thickness(25, 0, 0, 0);
+            addColourText.VerticalAlignment = VerticalAlignment.Center;
+            colourSp.Children.Add(addColourText);
+            
+            for (int i = 0; i < 4; i++)
+            {
+                //add the coloured pegs to the board
+                Ellipse selectColour = new Ellipse();
+                selectColour.Height = 20;
+                selectColour.Width = 20;
+                selectColour.Margin = new Thickness(15, 0, 0, 0);
+
+                switch (i)
+                {
+                    case 0:
+                        Color LightBlue = Color.FromArgb(255, 54, 192, 255);
+                        selectColour.Fill = new SolidColorBrush(LightBlue);
+                        //Debug.WriteLine(LightBlue);
+                        selectColour.Name = "1";
+                        break;
+                    case 1:
+                        selectColour.Fill = new SolidColorBrush(Colors.ForestGreen);
+                        selectColour.Name = "2";
+                        break;
+                    case 2:
+                        selectColour.Fill = new SolidColorBrush(Colors.CadetBlue);
+                        selectColour.Name = "3";
+                        break;
+                    default:
+                        selectColour.Fill = new SolidColorBrush(Colors.Goldenrod);
+                        selectColour.Name = "4";
+                        break;
+                }
+
+                colourSp.Children.Add(selectColour);
+                selectColour.Tapped += selectColour_Tapped;
+            }
+            
+        }
+
+        private void selectColour_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            currentColour = (Ellipse)sender;
+            String colour = currentColour.Name;
+            colourData.Add(colour);
+
+            Debug.WriteLine(colour);
+
+            listGrid.Children.Remove(FindName("spColour") as StackPanel);
         }
 
         //add list item when add icon is tapped
@@ -251,17 +325,20 @@ namespace ToDoList
         {
             if (!(inputText == "")) //input validation to check if list is not empty
             {
+                
                 StackPanel listSp = new StackPanel();
                 listSp.Name = _listStackPanel;
                 listSp.Height = 35;
                 listSp.CornerRadius = new CornerRadius(5);
                 listSp.SetValue(Grid.RowProperty, _RowNum);
                 listSp.SetValue(Grid.ColumnProperty, 1);
-                listSp.SetValue(Grid.ColumnSpanProperty, 2);
-                listSp.Background = new SolidColorBrush(Colors.Red);
                 listSp.Margin = new Thickness(0, 10, 0, 0);
                 listSp.Orientation = Orientation.Horizontal;
                 listSp.VerticalAlignment = VerticalAlignment.Center;
+                listSp.Background = currentColour.Fill;
+
+                Debug.WriteLine(currentColour.Fill);
+
                 listGrid.Children.Add(listSp);
 
                 //adds a text block with input text
@@ -279,11 +356,6 @@ namespace ToDoList
             } //if
         }
 
-        private void Image_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-
-        }
-
         //when delete icon is tapped it removes list item
         private void delete_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -293,6 +365,7 @@ namespace ToDoList
             try
             {
                 listData.Clear();
+                colourData.Clear();
             }
             catch (Exception)
             {
