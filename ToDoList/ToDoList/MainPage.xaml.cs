@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI;
@@ -88,7 +90,6 @@ namespace ToDoList
                 {
                     String inputText = line.Split('\n')[0]; //splits the line when new line encountered
                     numLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
-                    Debug.WriteLine(numLines);
 
                     //sets values for list items using number of lines in the file
                     _RowNum = numLines + 1;
@@ -124,10 +125,6 @@ namespace ToDoList
                 {
                     await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
                 }
-                
-                //test file string
-                string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
-                Debug.WriteLine(text);
             }
             catch (Exception)
             {
@@ -308,6 +305,8 @@ namespace ToDoList
         //when delete icon is tapped it removes list item
         private void delete_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            String soundString;
+
             //gets images sender object to get name
             Image currentImage = (Image)sender;
             String currentObj = currentImage.Name;
@@ -330,6 +329,18 @@ namespace ToDoList
                 listGrid.Children.Remove(FindName("listDividerBar_" + output) as Border);
                 listGrid.Children.Remove(FindName("listTextBox_" + output) as TextBlock);
                 listGrid.Children.Remove(FindName("deleteImage_" + output) as Image);
+            }
+            
+
+            ApplicationDataContainer localSetting = ApplicationData.Current.LocalSettings;
+            soundString = Convert.ToString(localSetting.Values["soundChoice"]); //convert to string
+
+            if(soundString == "ON")
+            {
+                //plays delete sound when clicked
+                MediaPlayer mediaPlayer = new MediaPlayer();
+                mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/deleteSound.mp3"));
+                mediaPlayer.Play();
             }
         } //delete_Tapped
     } //main page

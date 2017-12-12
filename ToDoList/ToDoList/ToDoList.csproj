@@ -119,6 +119,7 @@
     <Content Include="Assets\AddIcon.png" />
     <Content Include="Assets\AddIconWhite.png" />
     <Content Include="Assets\DeleteIcon.png" />
+    <Content Include="Assets\deleteSound.mp3" />
     <Content Include="Assets\MenuIcon.png" />
     <Content Include="Assets\PersonalIcon.png" />
     <Content Include="Assets\SettingsIcon.png" />

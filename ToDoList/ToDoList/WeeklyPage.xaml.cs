@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -35,7 +37,7 @@ namespace ToDoList
         //global variables
         int _RowNum;
         int _countChildren;
-        String _listStackPanel = "", _inputTextName = "", _finalName;
+        String _listStackPanel = "", _inputTextName = "", _finalName, _colour;
         Ellipse currentColour;
        
         //List to add list items to allow removal and saving to file
@@ -72,15 +74,6 @@ namespace ToDoList
         {
             base.OnNavigatedFrom(e);
 
-            //Ellipse colour = new Ellipse();
-            //colour.Fill = new SolidColorBrush(Colors.Gray);
-
-            //currentColour.Fill = colour.Fill;
-
-            //Windows.Storage.StorageFolder storageFolder2 = Windows.Storage.ApplicationData.Current.LocalFolder;
-            //Windows.Storage.StorageFile listFile = await storageFolder2.CreateFileAsync("weeklyList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
-            //Windows.Storage.StorageFile cFile = await storageFolder2.CreateFileAsync("colourList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
-
             //try to access the file
             try
             {
@@ -104,13 +97,9 @@ namespace ToDoList
                 {
                     String inputColour = line.Split('\n')[0]; //splits the line when new line encountered
                     colourNumLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
-
-                    Debug.WriteLine("\n" + inputColour);
-                    Debug.WriteLine(colourNumLines);
                     
                     //sets values for list items using number of lines in the file
                     _RowNum = colourNumLines + 1;
-                    Debug.WriteLine(_RowNum);
 
                     _listStackPanel = "listSp_" + (colourNumLines - 1);
 
@@ -121,8 +110,6 @@ namespace ToDoList
                 {
                     String inputText = line.Split('\n')[0]; //splits the line when new line encountered
                     numLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
-
-                    Debug.WriteLine(inputText);
 
                     //sets values for list items using number of lines in the file
                     _RowNum = numLines + 1;
@@ -148,7 +135,8 @@ namespace ToDoList
             base.OnNavigatedTo(e);
 
             try
-            {// Create file; replace if exists.
+            {
+                // Create file; replace if exists.
                 Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
                 Windows.Storage.StorageFile listFile = await storageFolder.CreateFileAsync("weeklyList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
                 Windows.Storage.StorageFile cFile = await storageFolder.CreateFileAsync("colourList.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
@@ -158,12 +146,6 @@ namespace ToDoList
                     await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
                     await FileIO.AppendTextAsync(cFile, colourData[i] + "\n");
                 }
-
-                //test file string
-                string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
-                string colour = await Windows.Storage.FileIO.ReadTextAsync(cFile);
-                Debug.WriteLine(text);
-                Debug.WriteLine(colour);
             }
             catch (Exception)
             {
@@ -253,11 +235,11 @@ namespace ToDoList
                         selectColour.Name = "Blue";
                         break;
                     case 1:
-                        selectColour.Fill = new SolidColorBrush(Colors.ForestGreen);
+                        selectColour.Fill = new SolidColorBrush(Colors.LightSeaGreen);
                         selectColour.Name = "Green";
                         break;
                     case 2:
-                        selectColour.Fill = new SolidColorBrush(Colors.CadetBlue);
+                        selectColour.Fill = new SolidColorBrush(Colors.DarkSlateBlue);
                         selectColour.Name = "DarkBlue";
                         break;
                     default:
@@ -275,10 +257,8 @@ namespace ToDoList
         private void selectColour_Tapped(object sender, TappedRoutedEventArgs e)
         {
             currentColour = (Ellipse)sender;
-            String colour = currentColour.Name;
-            colourData.Add(colour); 
-
-            Debug.WriteLine(colour);
+            _colour = currentColour.Name;
+            colourData.Add(_colour); 
 
             listGrid.Children.Remove(FindName("spColour") as StackPanel);
         }
@@ -286,72 +266,76 @@ namespace ToDoList
         //add list item when add icon is tapped
         private void popUpAddItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            //gets textbox object to get text from
-            TextBox getInputText = FindName("listText") as TextBox;
-            string objTextBox = getInputText.Text;
+            if (_colour == "Blue" || _colour == "Green" || _colour == "DarkBlue" || _colour == "Gold")
+            { 
+                //gets textbox object to get text from
+                TextBox getInputText = FindName("listText") as TextBox;
+                string objTextBox = getInputText.Text;
 
-            //counts the number of children to determine where to place list
-            _countChildren = VisualTreeHelper.GetChildrenCount(listGrid);
+                //counts the number of children to determine where to place list
+                _countChildren = VisualTreeHelper.GetChildrenCount(listGrid);
 
-            if (_countChildren <= 23)
-            {
-                switch (_countChildren)
+                if (_countChildren <= 23)
                 {
-                    case 9:
-                        //sets name for each list item to allow removal
-                        _RowNum = 2;
-                        _listStackPanel = "listSp_0";
-                        _inputTextName = "listTextBox_0";
-                        break;
-                    case 11:
-                        _RowNum = 3;
-                        _listStackPanel = "listSp_1";
-                        _inputTextName = "listTextBox_1";
-                        break;
-                    case 13:
-                        _RowNum = 4;
-                        _listStackPanel = "listSp_2";
-                        _inputTextName = "listTextBox_2";
-                        break;
-                    case 15:
-                        _RowNum = 5;
-                        _listStackPanel = "listSp_3";
-                        _inputTextName = "listTextBox_3";
-                        break;
-                    case 17:
-                        _RowNum = 6;
-                        _listStackPanel = "listSp_4";
-                        _inputTextName = "listTextBox_4";
-                        break;
-                    case 19:
-                        _RowNum = 7;
-                        _listStackPanel = "listSp_5";
-                        _inputTextName = "listTextBox_5";
-                        break;
-                    case 21:
-                        _RowNum = 8;
-                        _listStackPanel = "listSp_6";
-                        _inputTextName = "listTextBox_6";
-                        break;
-                    default:
-                        _RowNum = 9;
-                        _listStackPanel = "listSp_7";
-                        _inputTextName = "listTextBox_7";
-                        break;
-                } //switch
+                    switch (_countChildren)
+                    {
+                        case 9:
+                            //sets name for each list item to allow removal
+                            _RowNum = 2;
+                            _listStackPanel = "listSp_0";
+                            _inputTextName = "listTextBox_0";
+                            break;
+                        case 11:
+                            _RowNum = 3;
+                            _listStackPanel = "listSp_1";
+                            _inputTextName = "listTextBox_1";
+                            break;
+                        case 13:
+                            _RowNum = 4;
+                            _listStackPanel = "listSp_2";
+                            _inputTextName = "listTextBox_2";
+                            break;
+                        case 15:
+                            _RowNum = 5;
+                            _listStackPanel = "listSp_3";
+                            _inputTextName = "listTextBox_3";
+                            break;
+                        case 17:
+                            _RowNum = 6;
+                            _listStackPanel = "listSp_4";
+                            _inputTextName = "listTextBox_4";
+                            break;
+                        case 19:
+                            _RowNum = 7;
+                            _listStackPanel = "listSp_5";
+                            _inputTextName = "listTextBox_5";
+                            break;
+                        case 21:
+                            _RowNum = 8;
+                            _listStackPanel = "listSp_6";
+                            _inputTextName = "listTextBox_6";
+                            break;
+                        default:
+                            _RowNum = 9;
+                            _listStackPanel = "listSp_7";
+                            _inputTextName = "listTextBox_7";
+                            break;
+                    } //switch
 
-                _finalName = _inputTextName;
+                    _finalName = _inputTextName;
 
-                //calls create list item method
-                createColourSp();
-                createListItem(objTextBox);
+                    //calls create list item method
+                    createColourSp();
+                    createListItem(objTextBox);
 
-                //remove the add list text box from view
-                listGrid.Children.Remove(FindName("stackPanelList") as StackPanel);
+                    //remove the add list text box from view
+                    listGrid.Children.Remove(FindName("stackPanelList") as StackPanel);
 
-            } //if to limit list items to 9
+                } //if to limit list items to 9
+            } //outer if for validation
         }
 
+        //creates the coloured border when user enters input
         private void createColourSp()
         {
             Border listB = new Border();
@@ -367,6 +351,7 @@ namespace ToDoList
             listGrid.Children.Add(listB);
         }
 
+        //creates the coloured border when loading from file
         private void createColourSpFromFile(string inputColour)
         {
             Border listB = new Border();
@@ -385,16 +370,17 @@ namespace ToDoList
                     listB.Background = new SolidColorBrush(LightBlue);
                     break;
                 case "Green":
-                    listB.Background = new SolidColorBrush(Colors.ForestGreen);
+                    listB.Background = new SolidColorBrush(Colors.LightSeaGreen);
                     break;
                 case "DarkBlue":
-                    listB.Background = new SolidColorBrush(Colors.CadetBlue);
+                    listB.Background = new SolidColorBrush(Colors.DarkSlateBlue);
                     break;
                 default:
                     listB.Background = new SolidColorBrush(Colors.Goldenrod);
                     break;
             }
 
+            colourData.Add(inputColour);
             listGrid.Children.Add(listB);
         }
         #endregion
@@ -416,14 +402,14 @@ namespace ToDoList
                 listGrid.Children.Add(addInputText);
 
                 listData.Add(inputText); //add text to list to save to file
-
-                //Debug.WriteLine(listData[_RowNum - 2]);
             } //if
         }
 
         //when delete icon is tapped it removes list item
         private void delete_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            String soundString;
+
             try
             {
                 string output = _finalName.Substring(_finalName.Length - 1, 1); //cuts off last character to get list position to add it to name
@@ -444,7 +430,17 @@ namespace ToDoList
                 // Shouldn't get here 
                 Debug.WriteLine("Exception");
             }
-            
+
+            ApplicationDataContainer localSetting = ApplicationData.Current.LocalSettings;
+            soundString = Convert.ToString(localSetting.Values["soundChoice"]); //convert to string
+
+            if (soundString == "ON")
+            {
+                //plays delete sound when clicked
+                MediaPlayer mediaPlayer = new MediaPlayer();
+                mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/deleteSound.mp3"));
+                mediaPlayer.Play();
+            }
         } //delete_Tapped
     } //main page
 }

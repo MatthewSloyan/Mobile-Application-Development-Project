@@ -60,5 +60,16 @@ namespace ToDoList
             //within the container, save the tag currency
             localSettings.Values["currencyChoice"] = current.Tag.ToString();
         }
+
+        private void Sound_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton current = (RadioButton)sender;
+
+            //save the tag value as the setting and access the data container
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+
+            //within the container, save the tag currency
+            localSettings.Values["soundChoice"] = current.Tag.ToString();
+        }
     }
 }

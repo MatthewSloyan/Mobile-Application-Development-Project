@@ -80,6 +80,12 @@
                         <RadioButton Content="USD - $" Tag="$" Margin="15,0,0,0" Checked="RadioButton_Checked"/>
                     </StackPanel>
 
+                    <StackPanel Grid.Column="1" Grid.Row="3" Margin="0,10,100,0">
+                        <TextBlock Text="Sound:" FontSize="18" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                        <RadioButton Content="ON" Tag="ON" Margin="15,10,0,0" Checked="Sound_Checked"/>
+                        <RadioButton Content="OFF" Tag="OFF" Margin="15,0,0,0" Checked="Sound_Checked"/>
+                    </StackPanel>
+
                 </Grid>
             </SplitView.Content>
         </SplitView>
