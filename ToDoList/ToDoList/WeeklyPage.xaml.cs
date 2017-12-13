@@ -172,6 +172,7 @@ namespace ToDoList
             popUpAddItem.HorizontalAlignment = HorizontalAlignment.Left;
             listGrid.Children.Add(popUpAddItem);
 
+            //add text box to allow input
             TextBox addListText = new TextBox();
             addListText.Name = "listText";
             addListText.Foreground = new SolidColorBrush(Colors.White);

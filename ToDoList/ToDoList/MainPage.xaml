@@ -12,11 +12,13 @@
         <SplitView Name="SplitViewMenu" DisplayMode="CompactInline" CompactPaneLength="50" OpenPaneLength="180" IsPaneOpen="False">
             <SplitView.Pane>
                 <StackPanel>
+                    <!--menu button-->
                     <Button x:Name="MenuButton" Width="50" Height="50" Background="Transparent" Click="MenuButton_Click">
                         <Button.Content>
                             <Image Source="Assets/MenuIcon.png" HorizontalAlignment="Right" Width="30"/>
                         </Button.Content>
                     </Button>
+                    <!--personal section-->
                     <StackPanel Orientation="Horizontal" Background="#00A79D">
                         <Button x:Name="PersonalMenu" Width="50" Height="50" Background="Transparent">
                             <Button.Content>
@@ -25,6 +27,7 @@
                         </Button>
                         <TextBlock Text="Personal" FontSize="18" Foreground="White" VerticalAlignment="Center" />
                     </StackPanel>
+                    <!--shopping list section-->
                     <StackPanel Orientation="Horizontal" Background="#27AAE1">
                         <Button x:Name="ShoppingMenu" Width="50" Height="50" Background="Transparent" Click="ShoppingMenu_Click">
                             <Button.Content>
@@ -33,6 +36,7 @@
                         </Button>
                         <TextBlock Text="Shopping" FontSize="18" Foreground="White" VerticalAlignment="Center"/>
                     </StackPanel>
+                    <!--weekly section-->
                     <StackPanel Orientation="Horizontal" Background="#662D91">
                         <Button x:Name="WeeklyMenu" Width="50" Height="50" Background="Transparent" Click="WeeklyMenu_Click">
                             <Button.Content>
@@ -41,6 +45,7 @@
                         </Button>
                         <TextBlock Text="Weekly" FontSize="18" Foreground="White" VerticalAlignment="Center"/>
                     </StackPanel>
+                    <!--settings section-->
                     <StackPanel Orientation="Horizontal" Background="#58595B">
                         <Button x:Name="SettingsMenu" Width="50" Height="50" Background="Transparent" Click="SettingsMenu_Click">
                             <Button.Content>
@@ -54,6 +59,7 @@
 
             <!--Page contents-->
             <SplitView.Content>
+                <!--grid to define list elements-->
                 <Grid x:Name="listGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
@@ -77,11 +83,12 @@
                         <ColumnDefinition Width="15"/>
                     </Grid.ColumnDefinitions>
                 
+                    <!--hardcoded elements-->
                     <Image Source="Assets/ToDoListProLogo.png" Height="37" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                     <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="3" Height="2" VerticalAlignment="Top"/>
                     <TextBlock Text="Personal To-Do Lists" FontSize="18" FontWeight="Bold" Foreground="#00A79D" Grid.Column="1" Grid.Row="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
                     <Image Source="Assets/AddIcon.png" Height="40" HorizontalAlignment="Left" Grid.Row="11" Margin="13,2,0,0" Grid.Column="1" Tapped="Ellipse_Tapped"/>
-                    <TextBlock Text="Add List Item" FontSize="17" Foreground="#00A79D" Grid.Column="1" Grid.Row="11" Margin="60,15,0,15" VerticalAlignment="Center"/>
+                    <TextBlock Text="Add List Item" FontSize="17" Foreground="#00A79D" Grid.Column="1" Grid.Row="11" Margin="60,15,0,15" VerticalAlignment="Center" Tapped="Ellipse_Tapped"/>
 
                 </Grid>
             </SplitView.Content>

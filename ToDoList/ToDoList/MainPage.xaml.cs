@@ -331,7 +331,7 @@ namespace ToDoList
                 listGrid.Children.Remove(FindName("deleteImage_" + output) as Image);
             }
             
-
+            //gets wheter sound is on or off
             ApplicationDataContainer localSetting = ApplicationData.Current.LocalSettings;
             soundString = Convert.ToString(localSetting.Values["soundChoice"]); //convert to string
 

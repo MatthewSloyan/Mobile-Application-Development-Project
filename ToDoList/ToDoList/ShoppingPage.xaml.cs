@@ -103,7 +103,6 @@ namespace ToDoList
 
                     _inputText = line.Split('\n')[0]; //splits the line when new line encountered
                     numLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
-                    Debug.WriteLine(numLines);
 
                     //sets values for list items using number of lines in the file
                     _RowNum = numLines + 1;
@@ -121,7 +120,6 @@ namespace ToDoList
 
                     _inputCost = line.Split('\n')[0]; //splits the line when new line encountered
                     costNumLines += line.Split('\n').Length; //gets number of lines to determine where to place list 
-                    Debug.WriteLine(numLines);
 
                     //sets values for list items using number of lines in the file
                     _RowNum = costNumLines + 1;
@@ -156,12 +154,6 @@ namespace ToDoList
                     await FileIO.AppendTextAsync(listFile, listData[i] + "\n");
                     await FileIO.AppendTextAsync(listCostFile, listCost[i] + "\n");
                 }
-
-                //test file string
-                string text = await Windows.Storage.FileIO.ReadTextAsync(listFile);
-                string cost = await Windows.Storage.FileIO.ReadTextAsync(listCostFile);
-                Debug.WriteLine(text);
-                Debug.WriteLine(cost);
             }
             catch (Exception)
             {
@@ -409,7 +401,6 @@ namespace ToDoList
             {
                 enteredCost = Convert.ToDouble(inputCost); //convert to double
                 _totalCostEntered += enteredCost; //adds to total
-                Debug.WriteLine(_totalCostEntered);
                 addTotal(_totalCostEntered);
                 addCurrency(); //add currency
             }
@@ -426,6 +417,7 @@ namespace ToDoList
             //gets text box sender object to get text
             TextBox current = (TextBox)sender;
 
+            //using a regular expresion validate if input is a digit from 0-9 or contains a "."
             if (System.Text.RegularExpressions.Regex.IsMatch(current.Text, "[^0-9^.]"))
             {
                 current.Text = current.Text.Remove(current.Text.Length - 1); //takes away character if invalid
@@ -531,6 +523,7 @@ namespace ToDoList
                 listGrid.Children.Remove(FindName("deleteImage_" + output) as Image);
             }
 
+            //gets wheter sound is on or off
             ApplicationDataContainer localSetting = ApplicationData.Current.LocalSettings;
             soundString = Convert.ToString(localSetting.Values["soundChoice"]); //convert to string
 

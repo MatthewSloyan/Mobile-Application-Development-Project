@@ -9,14 +9,17 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <!--Allows user to click menu icon to drop out extened menu list-->
+        
         <SplitView Name="SplitViewMenu" DisplayMode="CompactInline" CompactPaneLength="50" OpenPaneLength="180" IsPaneOpen="False">
             <SplitView.Pane>
                 <StackPanel>
+                    <!--menu button-->
                     <Button x:Name="MenuButton" Width="50" Height="50" Background="Transparent" Click="MenuButton_Click">
                         <Button.Content>
                             <Image Source="Assets/MenuIcon.png" HorizontalAlignment="Right" Width="30"/>
                         </Button.Content>
                     </Button>
+                    <!--personal section-->
                     <StackPanel Orientation="Horizontal" Background="#00A79D">
                         <Button x:Name="PersonalMenu" Width="50" Height="50" Background="Transparent" Click="PersonalMenu_Click">
                             <Button.Content>
@@ -25,6 +28,7 @@
                         </Button>
                         <TextBlock Text="Personal" FontSize="18" Foreground="White" VerticalAlignment="Center" />
                     </StackPanel>
+                    <!--shopping list section-->
                     <StackPanel Orientation="Horizontal" Background="#27AAE1">
                         <Button x:Name="ShoppingMenu" Width="50" Height="50" Background="Transparent" Click="ShoppingMenu_Click">
                             <Button.Content>
@@ -33,6 +37,7 @@
                         </Button>
                         <TextBlock Text="Shopping" FontSize="18" Foreground="White" VerticalAlignment="Center"/>
                     </StackPanel>
+                    <!--weekly section-->
                     <StackPanel Orientation="Horizontal" Background="#662D91">
                         <Button x:Name="WeeklyMenu" Width="50" Height="50" Background="Transparent">
                             <Button.Content>
@@ -41,6 +46,7 @@
                         </Button>
                         <TextBlock Text="Weekly" FontSize="18" Foreground="White" VerticalAlignment="Center"/>
                     </StackPanel>
+                    <!--settings section-->
                     <StackPanel Orientation="Horizontal" Background="#58595B">
                         <Button x:Name="SettingsMenu" Width="50" Height="50" Background="Transparent" Click="SettingsMenu_Click">
                             <Button.Content>
@@ -54,6 +60,7 @@
 
             <!--Page contents-->
             <SplitView.Content>
+                <!--grid to determine for list placement-->
                 <Grid x:Name="listGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
@@ -74,7 +81,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="15"/>
                     </Grid.ColumnDefinitions>
-
+                    
+                    <!--hardcoded page elements-->
                     <Image Source="Assets/ToDoListProLogo.png" Height="37" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                     <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Height="2" VerticalAlignment="Top"/>
                     <TextBlock Text="Weekly" FontSize="18" FontWeight="Bold" Foreground="#662D91" Grid.Column="1" Grid.Row="1" Margin="15,0,0,0" VerticalAlignment="Center"/>
@@ -86,40 +94,6 @@
                     
                     <Image Source="Assets/DeleteIcon.png" Height="40" HorizontalAlignment="Center" Grid.Row="11" Margin="95,2,0,0" Grid.Column="1" Tapped="delete_Tapped"/>
                     <TextBlock Text="Delete All" FontSize="16" Foreground="#CE3A61" Grid.Column="1" Grid.Row="11" Margin="205,15,0,15" HorizontalAlignment="Center" VerticalAlignment="Center" Tapped="delete_Tapped"/>
-
-                    <!--<Pivot Title="Weekly List"  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-                        <PivotItem Header="Monday">
-                            <Grid x:Name="mondayGrid">
-                                --><!--<Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="2*"/>
-                                </Grid.RowDefinitions>
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="50"/>
-                                </Grid.ColumnDefinitions>--><!--
-                            </Grid>
-                        </PivotItem>
-                        <PivotItem Header="Tuesday">
-                            <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="3" Height="2" VerticalAlignment="Top"/>
-                        </PivotItem>
-                        <PivotItem Header="Wednesday">
-                            <Rectangle Fill="Red" Height="100" Width="400" HorizontalAlignment="Center" />
-                        </PivotItem>
-                        <PivotItem Header="Thursday">
-                            <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="3" Height="2" VerticalAlignment="Top"/>
-                        </PivotItem>
-                        <PivotItem Header="Friday">
-                            <Border Background="LightGray" Grid.Row="2" Grid.Column="1" CornerRadius="1" Grid.ColumnSpan="3" Height="2" VerticalAlignment="Top"/>
-                        </PivotItem>
-                    </Pivot>-->
 
                 </Grid>
             </SplitView.Content>
